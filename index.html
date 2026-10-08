@@ -1,0 +1,1378 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Навигатор поддержки</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f5ff; --surface:#ffffff; --surface-2:#f4f0fd; --text:#1d1736; --muted:#6b6585; --border:#ebe5f7;
+  --accent:#7c3aed; --accent-hover:#6d28d9; --accent-ink:#ffffff; --accent-soft:#f0e8ff;
+  --ok:#0f8a4c; --ok-soft:#e3f7ec; --warn:#a15c00; --warn-soft:#fff2db; --bad:#c0263d; --bad-soft:#ffe9ec;
+  --grad:linear-gradient(120deg,#7c3aed 0%,#db2777 55%,#f97316 100%);
+  --shadow:0 1px 2px rgba(60,30,120,.05),0 8px 24px rgba(80,40,160,.08);
+  --blob1:rgba(219,39,119,.12); --blob2:rgba(124,58,237,.12); --blob3:rgba(6,182,212,.10);
+  --radius:20px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#120e22; --surface:#1b1630; --surface-2:#241e3d; --text:#f0ebff; --muted:#a69fc4; --border:#30294f;
+    --accent:#a78bfa; --accent-hover:#c4b5fd; --accent-ink:#1a1033; --accent-soft:#2c2350;
+    --ok:#4ade80; --ok-soft:#12291d; --warn:#fbbf24; --warn-soft:#2e2310; --bad:#fb7185; --bad-soft:#35141c;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.3);
+    --blob1:rgba(219,39,119,.16); --blob2:rgba(124,58,237,.2); --blob3:rgba(6,182,212,.12);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#120e22; --surface:#1b1630; --surface-2:#241e3d; --text:#f0ebff; --muted:#a69fc4; --border:#30294f;
+  --accent:#a78bfa; --accent-hover:#c4b5fd; --accent-ink:#1a1033; --accent-soft:#2c2350;
+  --ok:#4ade80; --ok-soft:#12291d; --warn:#fbbf24; --warn-soft:#2e2310; --bad:#fb7185; --bad-soft:#35141c;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.3);
+  --blob1:rgba(219,39,119,.16); --blob2:rgba(124,58,237,.2); --blob3:rgba(6,182,212,.12);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:
+  radial-gradient(700px 420px at 105% -5%,var(--blob1),transparent 65%),
+  radial-gradient(640px 420px at -10% 15%,var(--blob2),transparent 65%),
+  radial-gradient(700px 500px at 50% 110%,var(--blob3),transparent 65%),
+  var(--bg);
+  background-attachment:fixed;color:var(--text);font:15px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3{line-height:1.25;margin:0 0 .5em;font-family:Montserrat,Inter,system-ui,sans-serif;font-weight:700}
+h1{font-size:28px;letter-spacing:-.01em}
+h2{font-size:20px}
+h3{font-size:16px}
+p{margin:0 0 .75em}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Header */
+.topbar{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--border)}
+.topbar-in{max-width:1160px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--text);font-weight:700;white-space:nowrap}
+.brand:hover{text-decoration:none}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.nav{display:flex;gap:4px;flex:1;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{padding:8px 12px;border-radius:9px;color:var(--muted);font-weight:500;white-space:nowrap}
+.nav a:hover{background:var(--surface-2);color:var(--text);text-decoration:none}
+.nav a.active{background:var(--accent-soft);color:var(--accent)}
+.tools{display:flex;align-items:center;gap:8px}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--muted);padding:6px 10px;font:600 13px Inter,system-ui,sans-serif;cursor:pointer}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.user{position:relative}
+.user-btn{display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;padding:4px 10px 4px 4px;cursor:pointer;font:500 13px Inter,system-ui,sans-serif}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:12px}
+.user-menu{position:absolute;right:0;top:calc(100% + 6px);width:280px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:12px;display:none}
+.user-menu.open{display:block}
+.user-menu label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
+
+/* Layout */
+main{max-width:1160px;margin:0 auto;padding:24px 16px 48px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.split{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.card + .card{margin-top:16px}
+.sticky{position:sticky;top:76px}
+.section{margin-top:28px}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.crumbs{font-size:13px;color:var(--muted);margin-bottom:10px}
+.crumbs a{color:var(--muted)}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--accent) 0%,#0d4f63 100%);color:#fff;border-radius:20px;padding:36px 32px;position:relative;overflow:hidden}
+.hero h1{font-size:32px;color:#fff}
+.hero p{color:rgba(255,255,255,.85);max-width:640px}
+.search{position:relative;margin-top:18px;max-width:720px}
+.search input{width:100%;padding:15px 16px 15px 46px;border-radius:12px;border:0;font:500 16px Inter,system-ui,sans-serif;background:#fff;color:#141a21;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#5b6572}
+.results{margin-top:10px;max-width:720px;background:var(--surface);color:var(--text);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;display:none}
+.results.show{display:block}
+.results a{display:flex;gap:12px;align-items:center;padding:12px 16px;color:var(--text);border-top:1px solid var(--border)}
+.results a:first-child{border-top:0}
+.results a:hover{background:var(--surface-2);text-decoration:none}
+.results .empty{padding:14px 16px;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff;border-radius:999px;padding:6px 12px;font:500 13px Inter,system-ui,sans-serif;cursor:pointer}
+.chip:hover{background:rgba(255,255,255,.2)}
+
+/* Tiles */
+.tile{display:block;color:var(--text);transition:transform .12s ease,border-color .12s ease}
+.tile:hover{text-decoration:none;transform:translateY(-2px);border-color:var(--accent)}
+.tile-ico{width:42px;height:42px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:12px}
+.tile h3{margin-bottom:4px}
+
+/* Pills, badges */
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;border-radius:999px;padding:2px 9px;background:var(--surface-2);color:var(--muted);white-space:nowrap;vertical-align:middle}
+.pill-ok{background:var(--ok-soft);color:var(--ok)}
+.pill-warn{background:var(--warn-soft);color:var(--warn)}
+.pill-bad{background:var(--bad-soft);color:var(--bad)}
+.pill-acc{background:var(--accent-soft);color:var(--accent)}
+
+/* Measure list */
+.cat-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.fbtn{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;padding:7px 14px;font:500 13px Inter,system-ui,sans-serif;cursor:pointer}
+.fbtn.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.mcard{display:flex;flex-direction:column;gap:8px;color:var(--text)}
+.mcard:hover{text-decoration:none;border-color:var(--accent)}
+.mcard .amt{font-size:18px;font-weight:700}
+.mcard .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+
+/* Definition list */
+.dl{display:grid;grid-template-columns:200px minmax(0,1fr);gap:10px 16px;margin:0}
+.dl dt{color:var(--muted);font-size:13px;padding-top:1px}
+.dl dd{margin:0}
+.dl ul{margin:0;padding-left:18px}
+
+/* Forms */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600}
+input[type=text],input[type=number],input[type=date],input[type=search],select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text);font:15px Inter,system-ui,sans-serif}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:10px;padding:10px 16px;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;background:var(--accent);color:var(--accent-ink)}
+.btn:hover{background:var(--accent-hover);text-decoration:none}
+.btn-ghost{background:transparent;color:var(--text);border-color:var(--border)}
+.btn-ghost:hover{background:var(--surface-2)}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.hint{font-size:12px;color:var(--muted)}
+.row-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+
+/* Result boxes */
+.result{margin-top:16px;border-radius:12px;padding:16px;border:1px solid var(--border);background:var(--surface-2)}
+.result.ok{background:var(--ok-soft);border-color:transparent}
+.result.bad{background:var(--bad-soft);border-color:transparent}
+.result.warn{background:var(--warn-soft);border-color:transparent}
+.result h3{display:flex;align-items:center;gap:8px}
+.result.ok h3{color:var(--ok)} .result.bad h3{color:var(--bad)} .result.warn h3{color:var(--warn)}
+.sumrows{width:100%;border-collapse:collapse;margin-top:8px}
+.sumrows td{padding:6px 0;border-top:1px dashed var(--border)}
+.sumrows tr:first-child td{border-top:0}
+.sumrows td:last-child{text-align:right;font-weight:600}
+.sumrows tr.total td{font-size:17px;font-weight:700}
+.note{margin-top:12px;font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:flex-start}
+.callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 14px;border-radius:0 10px 10px 0;font-size:14px}
+.callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+
+/* Tables */
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table.t{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+table.t th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600;background:var(--surface-2);padding:10px 12px;white-space:nowrap}
+table.t td{padding:10px 12px;border-top:1px solid var(--border);vertical-align:top}
+table.t td.r,table.t th.r{text-align:right}
+table.t input{padding:6px 8px;max-width:140px}
+.empty-row td{color:var(--muted);text-align:center;padding:24px}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px;overflow-x:auto}
+.tabs button{border:0;background:transparent;padding:10px 14px;font:600 14px Inter,system-ui,sans-serif;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--accent);border-color:var(--accent)}
+
+/* FAQ */
+details.faq{border-top:1px solid var(--border);padding:12px 0}
+details.faq:first-of-type{border-top:0}
+details.faq summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::after{content:"+";color:var(--muted);font-weight:400;font-size:20px;line-height:1}
+details.faq[open] summary::after{content:"–"}
+details.faq p{margin:8px 0 0;color:var(--muted)}
+
+.stat{font-size:24px;font-weight:700}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--border);font-size:14px}
+.kv:first-child{border-top:0}
+.kv span:first-child{color:var(--muted)}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-height:180px;overflow:auto;border:1px solid var(--border);border-radius:10px;padding:10px}
+.checks label{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:400}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:12px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:all .2s ease;z-index:50;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+footer{max-width:1160px;margin:0 auto;padding:0 16px 32px;color:var(--muted);font-size:12px}
+
+/* ===== Яркое оформление ===== */
+.topbar{background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:0;box-shadow:0 1px 0 var(--border)}
+.topbar::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:3px;background:var(--grad)}
+.brand-mark{background:var(--grad);color:#fff;box-shadow:0 6px 16px rgba(219,39,119,.35)}
+.brand{font-family:Montserrat,Inter,sans-serif}
+.nav a.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+.seg button.on{background:var(--grad);color:#fff}
+.avatar{background:var(--grad);color:#fff}
+
+.card{border-color:var(--border)}
+.btn{background:var(--grad);color:#fff;border-radius:999px;box-shadow:0 6px 18px rgba(219,39,119,.28);transition:transform .12s ease,box-shadow .12s ease,filter .12s ease}
+.btn:hover{background:var(--grad);filter:brightness(1.07);transform:translateY(-1px);box-shadow:0 10px 24px rgba(219,39,119,.35)}
+.btn-ghost{background:var(--surface);color:var(--text);box-shadow:none}
+.btn-ghost:hover{background:var(--surface-2);filter:none}
+.fbtn{font-weight:600}
+.fbtn.on{background:var(--grad);border-color:transparent;color:#fff}
+.tabs button.on{color:var(--accent);border-image:var(--grad) 1}
+table.t th{background:var(--accent-soft);color:var(--accent)}
+.callout{border-left:4px solid transparent;border-image:var(--grad) 1;background:var(--accent-soft);border-radius:0}
+
+/* Hero */
+.hero{background:var(--grad);padding:44px 40px;border-radius:28px;box-shadow:0 20px 50px rgba(124,58,237,.28);isolation:isolate}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;z-index:-1}
+.hero::before{width:360px;height:360px;right:-90px;top:-140px;background:rgba(255,255,255,.14)}
+.hero::after{width:220px;height:220px;left:-70px;bottom:-110px;background:rgba(255,214,102,.28)}
+.hero h1{font-size:38px;font-weight:800;max-width:600px}
+.hero-art{position:absolute;right:36px;top:50%;transform:translateY(-50%);width:300px;pointer-events:none}
+.hero .search,.hero .chips,.hero p,.hero h1,.results{position:relative;z-index:1}
+.results{position:relative}
+.chip{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.45);font-weight:600}
+.chip:hover{background:#fff;color:#7c3aed}
+
+/* Плитки */
+.tile{position:relative;overflow:hidden;border:0}
+.tile::after{content:"";position:absolute;width:140px;height:140px;border-radius:50%;right:-50px;bottom:-60px;background:var(--g);opacity:.14;transition:transform .2s ease}
+.tile:hover::after{transform:scale(1.25)}
+.tile:hover{border-color:transparent;box-shadow:0 14px 30px rgba(80,40,160,.16)}
+.tile-ico{background:var(--g,var(--grad));color:#fff;width:50px;height:50px;border-radius:16px;box-shadow:0 8px 18px rgba(0,0,0,.14)}
+
+/* Цветные баннеры разделов */
+.banner{background:var(--g);color:#fff;border-radius:24px;padding:26px 30px;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden;margin-bottom:22px;box-shadow:0 14px 36px rgba(60,30,120,.2);isolation:isolate}
+.banner::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-60px;top:-120px;background:rgba(255,255,255,.16);z-index:-1}
+.banner::after{content:"";position:absolute;width:120px;height:120px;border-radius:32px;right:120px;bottom:-70px;transform:rotate(25deg);background:rgba(255,255,255,.12);z-index:-1}
+.banner h1{color:#fff;margin:0;font-size:28px;font-weight:800}
+.banner p{color:rgba(255,255,255,.88);margin:4px 0 0}
+.banner a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.banner .crumbs{color:rgba(255,255,255,.8);margin:0 0 4px}
+.banner .pill-warn{background:rgba(255,255,255,.25);color:#fff}
+.b-ico{flex:none;width:64px;height:64px;border-radius:20px;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:32px;line-height:1;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+
+/* Карточки мер */
+.mcard{position:relative;overflow:hidden;border:0;padding-top:24px}
+.mcard::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--c)}
+.mcard:hover{box-shadow:0 14px 30px color-mix(in srgb,var(--c) 30%,transparent);transform:translateY(-2px)}
+.mcard{transition:transform .12s ease,box-shadow .12s ease}
+.mcard .emoji{position:absolute;right:16px;top:18px;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:color-mix(in srgb,var(--c) 15%,transparent)}
+.mcard h3{padding-right:52px}
+.mcard .amt{color:var(--c)}
+.pill-cat{background:color-mix(in srgb,var(--c) 15%,transparent);color:var(--c)}
+
+/* Цветные показатели командировки */
+.statc{border-radius:18px;padding:16px;color:#fff;background:var(--g);box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.statc .muted{color:rgba(255,255,255,.85)}
+
+@media (min-width:901px){ .hero .search,.hero .results,.hero .chips,.hero p{max-width:min(720px,calc(100% - 330px))} }
+@media (max-width:900px){ .hero-art{display:none} }
+@media (max-width:640px){
+  .hero{padding:28px 20px;border-radius:22px}
+  .hero h1{font-size:26px}
+  .banner{padding:20px;gap:14px;border-radius:20px}
+  .banner h1{font-size:21px}
+  .b-ico{width:50px;height:50px;font-size:25px;border-radius:16px}
+}
+
+@media (max-width:900px){
+  .split{grid-template-columns:1fr}
+  .sticky{position:static}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .topbar-in{flex-wrap:wrap;gap:10px}
+  .nav{order:3;flex-basis:100%}
+  .tools{margin-left:auto}
+  .brand small{display:none}
+  .user-btn .uname{display:none}
+  .hero{padding:24px 18px}
+  .hero h1{font-size:24px}
+  h1{font-size:23px}
+  .g2,.g3,.g4,.row-fields,.checks{grid-template-columns:1fr}
+  .dl{grid-template-columns:1fr;gap:2px}
+  .dl dd{margin-bottom:10px}
+  .card{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#/">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>
+      </span>
+      <span><span data-i="brand"></span><small data-i="brandSub"></small></span>
+    </a>
+    <nav class="nav" id="nav"></nav>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Язык / Тіл">
+        <button data-lang="ru">RU</button><button data-lang="kz">ҚАЗ</button>
+      </div>
+      <div class="user">
+        <button class="user-btn" id="userBtn" aria-haspopup="true"><span class="avatar" id="avatar"></span><span class="uname" id="uname"></span></button>
+        <div class="user-menu" id="userMenu"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="app"></main>
+<footer id="footer"></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   ДЕМО-ДАННЫЕ. В рабочей версии всё ниже приходит с сервера
+   (справочники ведут HR и бухгалтерия через админ-панель).
+   ============================================================ */
+const TODAY = new Date();
+const CUR_YEAR = TODAY.getFullYear();
+const REG_START = 2026; // реестр выплат ведётся с этого года
+
+const BASE = { // базовые величины по годам
+  2025: { MRP: 3932, MZP: 85000, PD_RK: 6, PD_ABROAD: 8 },
+  2026: { MRP: 4325, MZP: 85000, PD_RK: 6, PD_ABROAD: 8 }
+};
+const RATES = {
+  date: TODAY, source: 'nb',
+  list: { USD: 512.40, EUR: 596.80, RUB: 6.32, CNY: 71.15, TRY: 12.48, AED: 139.52 }
+};
+
+const PROFILE = {
+  fio: 'Сейткали Айгерим Маратовна', short: 'Сейткали А. М.', tab: '004512',
+  dept: { ru: 'Департамент цифровизации', kz: 'Цифрландыру департаменті' },
+  pos: { ru: 'Главный специалист', kz: 'Бас маман' },
+  cat: 3, hired: '2019-03-11',
+  benefits: [{ code: 'large', status: 'pending' }]
+};
+
+const BENEFITS = {
+  large: { ru: 'Многодетная семья', kz: 'Көпбалалы отбасы' },
+  disab: { ru: 'Инвалидность', kz: 'Мүгедектік' }
+};
+
+const CATS = [
+  { id: 'family', ru: 'Семья и дети', kz: 'Отбасы және балалар', color: '#e11d74', emoji: '👨‍👩‍👧' },
+  { id: 'health', ru: 'Здоровье', kz: 'Денсаулық', color: '#059669', emoji: '🩺' },
+  { id: 'dates', ru: 'Памятные даты', kz: 'Есте қаларлық күндер', color: '#d97706', emoji: '🎉' },
+  { id: 'hard', ru: 'Тяжёлые жизненные ситуации', kz: 'Ауыр өмірлік жағдайлар', color: '#2563eb', emoji: '🤝' },
+  { id: 'rest', ru: 'Отдых и оздоровление', kz: 'Демалыс және сауықтыру', color: '#0891b2', emoji: '🏖️' }
+];
+
+/* Цветовые градиенты разделов */
+const PAGE_GRADS = {
+  support: 'linear-gradient(120deg,#ec4899,#8b5cf6)',
+  payments: 'linear-gradient(120deg,#10b981,#0ea5e9)',
+  trips: 'linear-gradient(120deg,#f59e0b,#ef4444)',
+  info: 'linear-gradient(120deg,#06b6d4,#6366f1)',
+  admin: 'linear-gradient(120deg,#475569,#7c3aed)'
+};
+function banner(key, title, sub, emoji, extra = '') {
+  return `<section class="banner" style="--g:${PAGE_GRADS[key] || key}"><div class="b-ico">${emoji}</div><div>${extra}<h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div></section>`;
+}
+
+const OWNERS = {
+  soc: { ru: 'Отдел социальной поддержки', kz: 'Әлеуметтік қолдау бөлімі', contact: 'вн. 2140, social@corp.local' },
+  hr:  { ru: 'Управление персоналом', kz: 'Персоналды басқару', contact: 'вн. 2101, hr@corp.local' }
+};
+
+const MEASURES = [
+  { id: 'birth', cat: 'family', calc: { type: 'mrp', k: 50 }, period: { type: 'event' }, cond: { minYears: 0 },
+    title: { ru: 'Материальная помощь при рождении ребёнка', kz: 'Бала туған кездегі материалдық көмек' },
+    desc: { ru: 'Единовременная помощь работнику при рождении (усыновлении) ребёнка. Если оба родителя работают в компании, помощь выплачивается одному из них.',
+            kz: 'Бала туған (асырап алған) кезде қызметкерге берілетін біржолғы көмек. Ата-ананың екеуі де компанияда жұмыс істесе, көмек біреуіне төленеді.' },
+    docs: { ru: ['Заявление', 'Свидетельство о рождении ребёнка', 'Копия удостоверения личности'], kz: ['Өтініш', 'Баланың туу туралы куәлігі', 'Жеке куәлік көшірмесі'] },
+    deadline: { ru: 'Не позднее 6 месяцев с даты рождения', kz: 'Туған күннен бастап 6 айдан кешіктірмей' },
+    rule: 'п. 4.1.1', owner: 'soc', tpl: true, syn: ['ребенок', 'ребёнок', 'роды', 'рождение', 'бала', 'туу', 'усыновление'] },
+  { id: 'wedding', cat: 'family', calc: { type: 'mrp', k: 30 }, period: { type: 'event' }, cond: { minYears: 1 },
+    title: { ru: 'Помощь при вступлении в брак', kz: 'Неке қию кезіндегі көмек' },
+    desc: { ru: 'Единовременная помощь при регистрации брака работника.', kz: 'Қызметкердің некесін тіркеу кезіндегі біржолғы көмек.' },
+    docs: { ru: ['Заявление', 'Свидетельство о заключении брака'], kz: ['Өтініш', 'Неке қию туралы куәлік'] },
+    deadline: { ru: 'Не позднее 3 месяцев с даты регистрации брака', kz: 'Неке тіркелген күннен бастап 3 айдан кешіктірмей' },
+    rule: 'п. 4.1.2', owner: 'soc', tpl: true, syn: ['свадьба', 'брак', 'женитьба', 'замужество', 'неке', 'үйлену'] },
+  { id: 'treat', cat: 'health', calc: { type: 'salary', k: 1 }, period: { type: 'years', n: 1, limit: 1 }, cond: { minYears: 1 },
+    title: { ru: 'Материальная помощь на лечение', kz: 'Емделуге арналған материалдық көмек' },
+    desc: { ru: 'Помощь на оплату лечения, операций и дорогостоящих лекарств работника при наличии медицинских документов.', kz: '' },
+    docs: { ru: ['Заявление', 'Медицинское заключение', 'Документы, подтверждающие расходы'], kz: ['Өтініш', 'Медициналық қорытынды', 'Шығындарды растайтын құжаттар'] },
+    deadline: { ru: 'В течение года, в котором понесены расходы', kz: 'Шығын жұмсалған жыл ішінде' },
+    rule: 'п. 4.2.1', owner: 'soc', tpl: true, deduct: [{ ru: 'ИПН', kz: 'ЖТС', pct: 10 }], syn: ['лечение', 'операция', 'лекарства', 'болезнь', 'емделу'] },
+  { id: 'sanat', cat: 'health', calc: { type: 'mrp', k: 30 }, period: { type: 'years', n: 2, limit: 1 }, cond: { minYears: 3 }, suggest: true,
+    title: { ru: 'Компенсация санаторно-курортного лечения', kz: 'Санаторий-курорттық емделу өтемақысы' },
+    desc: { ru: 'Частичная компенсация стоимости путёвки в санаторий на территории Республики Казахстан.', kz: 'Қазақстан Республикасы аумағындағы санаторийге жолдама құнының ішінара өтемақысы.' },
+    docs: { ru: ['Заявление', 'Копия путёвки', 'Документ об оплате'], kz: ['Өтініш', 'Жолдама көшірмесі', 'Төлем құжаты'] },
+    deadline: { ru: 'Не позднее 30 дней после окончания лечения', kz: 'Емделу аяқталғаннан кейін 30 күннен кешіктірмей' },
+    rule: 'п. 4.2.3', owner: 'soc', tpl: true, syn: ['санаторий', 'курорт', 'путевка', 'путёвка'] },
+  { id: 'vacation', cat: 'rest', calc: { type: 'salary', k: 1 }, period: { type: 'years', n: 1, limit: 1 }, cond: { minYears: 0.5 }, suggest: true,
+    title: { ru: 'Пособие на оздоровление к отпуску', kz: 'Демалысқа сауықтыру жәрдемақысы' },
+    desc: { ru: 'Выплачивается один раз в календарный год при уходе в ежегодный трудовой отпуск.', kz: 'Жыл сайынғы еңбек демалысына шыққан кезде күнтізбелік жылына бір рет төленеді.' },
+    docs: { ru: ['Заявление (подаётся вместе с заявлением на отпуск)'], kz: ['Өтініш (демалыс туралы өтінішпен бірге беріледі)'] },
+    deadline: { ru: 'Одновременно с заявлением на отпуск', kz: 'Демалыс туралы өтінішпен бір мезгілде' },
+    rule: 'п. 4.5.1', owner: 'hr', tpl: true, deduct: [{ ru: 'ИПН', kz: 'ЖТС', pct: 10 }], syn: ['отпуск', 'оздоровление', 'отпускные', 'демалыс'] },
+  { id: 'jubilee', cat: 'dates', calc: { type: 'mzp', k: 1 }, period: { type: 'event' }, cond: { milestone: [10, 20, 30] },
+    title: { ru: 'Поощрение к юбилею работы в компании', kz: 'Компаниядағы жұмыс мерейтойына көтермелеу' },
+    desc: { ru: 'Выплата работникам, у которых в текущем году исполняется 10, 20 или 30 лет непрерывной работы в компании.', kz: '' },
+    docs: { ru: ['Не требуются — выплата по приказу'], kz: ['Талап етілмейді — бұйрық бойынша төленеді'] },
+    deadline: { ru: 'Заявление не требуется', kz: 'Өтініш талап етілмейді' },
+    rule: 'п. 4.3.2', owner: 'hr', tpl: false, syn: ['юбилей', 'стаж', 'мерейтой'] },
+  { id: 'large', cat: 'family', calc: { type: 'mrp', k: 20 }, period: { type: 'years', n: 1, limit: 1 }, cond: { benefit: 'large' }, suggest: true,
+    title: { ru: 'Помощь многодетным семьям к 1 сентября', kz: 'Көпбалалы отбасыларға 1 қыркүйекке көмек' },
+    desc: { ru: 'Помощь на подготовку детей к школе для работников из многодетных семей (4 и более несовершеннолетних детей).', kz: 'Көпбалалы отбасылардан шыққан қызметкерлерге (4 және одан көп кәмелетке толмаған бала) балаларды мектепке дайындауға көмек.' },
+    docs: { ru: ['Заявление', 'Справка о составе семьи'], kz: ['Өтініш', 'Отбасы құрамы туралы анықтама'] },
+    deadline: { ru: 'С 1 июля по 15 сентября', kz: '1 шілдеден 15 қыркүйекке дейін' },
+    rule: 'п. 4.1.4', owner: 'soc', tpl: true, syn: ['многодетные', 'школа', 'сентябрь', 'көпбалалы', 'мектеп'] },
+  { id: 'disab', cat: 'health', calc: { type: 'mzp', k: 2 }, period: { type: 'years', n: 1, limit: 1 }, cond: { benefit: 'disab' },
+    title: { ru: 'Поддержка работников с инвалидностью', kz: 'Мүгедектігі бар қызметкерлерді қолдау' },
+    desc: { ru: 'Ежегодная помощь работникам с установленной инвалидностью.', kz: 'Мүгедектігі белгіленген қызметкерлерге жыл сайынғы көмек.' },
+    docs: { ru: ['Заявление', 'Справка МСЭ'], kz: ['Өтініш', 'МӘС анықтамасы'] },
+    deadline: { ru: 'В течение календарного года', kz: 'Күнтізбелік жыл ішінде' },
+    rule: 'п. 4.2.4', owner: 'soc', tpl: false, syn: ['инвалидность', 'мүгедектік'] },
+  { id: 'death', cat: 'hard', calc: { type: 'mrp', k: 100 }, period: { type: 'event' }, cond: { minYears: 0 },
+    title: { ru: 'Помощь в случае смерти близкого родственника', kz: 'Жақын туысы қайтыс болған жағдайдағы көмек' },
+    desc: { ru: 'Единовременная помощь при смерти супруга(и), детей, родителей работника.', kz: 'Қызметкердің жұбайы, балалары, ата-анасы қайтыс болған кездегі біржолғы көмек.' },
+    docs: { ru: ['Заявление', 'Свидетельство о смерти', 'Документ, подтверждающий родство'], kz: ['Өтініш', 'Қайтыс болу туралы куәлік', 'Туыстықты растайтын құжат'] },
+    deadline: { ru: 'Не позднее 6 месяцев с даты события', kz: 'Оқиға болған күннен бастап 6 айдан кешіктірмей' },
+    rule: 'п. 4.4.1', owner: 'soc', tpl: false, syn: ['смерть', 'похороны', 'утрата', 'қаза'] },
+  { id: 'disaster', cat: 'hard', calc: { type: 'fixed', k: 500000 }, period: { type: 'years', n: 3, limit: 1 }, cond: { minYears: 0 },
+    title: { ru: 'Помощь при пожаре или стихийном бедствии', kz: 'Өрт немесе табиғи апат кезіндегі көмек' },
+    desc: { ru: 'Помощь работнику, жильё или имущество которого пострадало от пожара, наводнения или иного стихийного бедствия.', kz: 'Тұрғын үйі немесе мүлкі өрттен, су тасқынынан немесе басқа табиғи апаттан зардап шеккен қызметкерге көмек.' },
+    docs: { ru: ['Заявление', 'Акт ДЧС / справка уполномоченного органа'], kz: ['Өтініш', 'ТЖД актісі / уәкілетті орган анықтамасы'] },
+    deadline: { ru: 'Не позднее 3 месяцев с даты события', kz: 'Оқиға болған күннен бастап 3 айдан кешіктірмей' },
+    rule: 'п. 4.4.3', owner: 'soc', tpl: true, syn: ['пожар', 'наводнение', 'бедствие', 'чс', 'өрт', 'апат'] }
+];
+
+const EMPLOYEES = [
+  { tab: '004512', fio: 'Сейткали А. М.', role: 'employee' },
+  { tab: '003118', fio: 'Нурланов Е. К.', role: 'hr' },
+  { tab: '005201', fio: 'Ким О. В.', role: 'acc' },
+  { tab: '002764', fio: 'Абдрахманова Д. С.', role: 'employee' },
+  { tab: '006033', fio: 'Оспанов Т. Б.', role: 'admin' }
+];
+
+const PAYMENTS = [
+  { emp: '004512', m: 'vacation', sum: 450000, date: '2026-03-15', order: '112-к', orderDate: '2026-03-12', by: 'Нурланов Е. К.' },
+  { emp: '004512', m: 'birth', sum: 216250, date: '2026-07-02', order: '245-к', orderDate: '2026-06-30', by: 'Нурланов Е. К.' },
+  { emp: '002764', m: 'treat', sum: 380000, date: '2026-05-20', order: '178-к', orderDate: '2026-05-18', by: 'Нурланов Е. К.' },
+  { emp: '002764', m: 'vacation', sum: 380000, date: '2026-06-10', order: '201-к', orderDate: '2026-06-06', by: 'Нурланов Е. К.' }
+];
+
+const POS_CATS = {
+  1: { ru: 'Категория 1 — руководящий состав', kz: '1-санат — басшылық құрам' },
+  2: { ru: 'Категория 2 — руководители подразделений', kz: '2-санат — бөлімше басшылары' },
+  3: { ru: 'Категория 3 — специалисты', kz: '3-санат — мамандар' }
+};
+
+/* Нормы командировочных: [кат.1, кат.2, кат.3]. Для KZ — в МРП. */
+const COUNTRIES = [
+  { code: 'KZ', ru: 'Казахстан', kz: 'Қазақстан', cur: 'MRP', daily: [6, 6, 6], hotel: [10, 8, 7],
+    cities: [{ ru: 'Астана', kz: 'Астана', hotel: [20, 17, 15] }, { ru: 'Алматы', kz: 'Алматы', hotel: [20, 17, 15] }, { ru: 'Атырау', kz: 'Атырау', hotel: [18, 15, 13] }, { ru: 'Шымкент', kz: 'Шымкент' }, { ru: 'Актау', kz: 'Ақтау' }, { ru: 'Караганда', kz: 'Қарағанды' }] },
+  { code: 'TR', ru: 'Турция', kz: 'Түркия', cur: 'USD', daily: [70, 60, 50], hotel: [250, 180, 140],
+    cities: [{ ru: 'Стамбул', kz: 'Стамбұл', hotel: [300, 220, 170] }, { ru: 'Анкара', kz: 'Анкара' }, { ru: 'Анталья', kz: 'Анталья' }] },
+  { code: 'RU', ru: 'Россия', kz: 'Ресей', cur: 'USD', daily: [60, 50, 40], hotel: [220, 170, 130],
+    cities: [{ ru: 'Москва', kz: 'Мәскеу', hotel: [300, 230, 180] }, { ru: 'Санкт-Петербург', kz: 'Санкт-Петербург', hotel: [260, 200, 150] }, { ru: 'Казань', kz: 'Қазан' }] },
+  { code: 'AE', ru: 'ОАЭ', kz: 'БАӘ', cur: 'USD', daily: [80, 70, 60], hotel: [350, 260, 200],
+    cities: [{ ru: 'Дубай', kz: 'Дубай' }, { ru: 'Абу-Даби', kz: 'Әбу-Даби' }] },
+  { code: 'DE', ru: 'Германия', kz: 'Германия', cur: 'EUR', daily: [70, 60, 50], hotel: [250, 190, 150],
+    cities: [{ ru: 'Берлин', kz: 'Берлин' }, { ru: 'Франкфурт-на-Майне', kz: 'Майндағы Франкфурт', hotel: [280, 210, 170] }] },
+  { code: 'CN', ru: 'Китай', kz: 'Қытай', cur: 'USD', daily: [65, 55, 45], hotel: [230, 170, 130],
+    cities: [{ ru: 'Пекин', kz: 'Бейжің' }, { ru: 'Шанхай', kz: 'Шанхай', hotel: [260, 190, 150] }, { ru: 'Урумчи', kz: 'Үрімжі' }] },
+  { code: 'UZ', ru: 'Узбекистан', kz: 'Өзбекстан', cur: 'USD', daily: [50, 40, 35], hotel: [180, 130, 100],
+    cities: [{ ru: 'Ташкент', kz: 'Ташкент' }, { ru: 'Самарканд', kz: 'Самарқанд' }] }
+];
+
+const JOURNAL = [
+  { at: '2026-01-05 10:14', who: 'Ким О. В.', what: { ru: 'Базовые величины 2026: МРП 3 932 → 4 325', kz: '2026 базалық шамалары: АЕК 3 932 → 4 325' } },
+  { at: '2026-03-12 16:40', who: 'Нурланов Е. К.', what: { ru: 'Реестр: приказ № 112-к, «Пособие на оздоровление», 1 работник', kz: 'Тізілім: № 112-к бұйрық, «Сауықтыру жәрдемақысы», 1 қызметкер' } },
+  { at: '2026-06-30 11:02', who: 'Нурланов Е. К.', what: { ru: 'Реестр: приказ № 245-к, «Помощь при рождении ребёнка», 1 работник', kz: 'Тізілім: № 245-к бұйрық, «Бала туған кездегі көмек», 1 қызметкер' } }
+];
+
+/* ============================================================
+   ЛОКАЛИЗАЦИЯ
+   ============================================================ */
+const T = {
+  ru: {
+    brand: 'Навигатор поддержки', brandSub: 'Соцподдержка и командировки',
+    navHome: 'Главная', navSupport: 'Соцподдержка', navPayments: 'Мои выплаты', navTrips: 'Командировки', navInfo: 'Справка', navAdmin: 'Админ-панель',
+    heroTitle: 'Что вам положено — за минуту', heroSub: 'Найдите меру социальной поддержки, проверьте свои выплаты и рассчитайте командировочные.',
+    searchPh: 'Например: «помощь при рождении ребёнка» или «суточные Турция»', searchEmpty: 'Ничего не найдено. Попробуйте другую формулировку.',
+    tileSupport: 'Каталог мер, условия и калькулятор', tilePayments: 'Статус и история выплат по годам', tileTrips: 'Суточные и проживание по странам', tileInfo: 'FAQ, документы, контакты',
+    mayBeDue: 'Вам может быть положено', mayBeDueSub: 'Меры, условиям которых соответствует ваш профиль и которые ещё не получены в {y} году', nothingDue: 'Сейчас нет мер, подходящих под ваш профиль.',
+    profile: 'Мой профиль', tabNo: 'Табельный №', dept: 'Подразделение', position: 'Должность', posCat: 'Категория должности', hired: 'Дата приёма', stazh: 'Стаж', benefits: 'Льготные категории',
+    notConfirmed: 'не подтверждена', confirmedSt: 'подтверждена', role: 'Роль (демо)', roleEmployee: 'Работник', roleHr: 'Специалист HR', roleAcc: 'Бухгалтерия', roleAdmin: 'Администратор',
+    sso: 'Вход выполнен через корпоративную учётную запись', theme: 'Тема', themeAuto: 'Авто', themeLight: 'Светлая', themeDark: 'Тёмная',
+    allCats: 'Все', measuresCount: 'мер', open: 'Подробнее',
+    fDesc: 'Описание', fCond: 'Условия получения', fCalc: 'Размер', fPeriod: 'Периодичность', fLimit: 'Лимит', fDocs: 'Документы', fDeadline: 'Сроки подачи', fRule: 'Основание', fOwner: 'Ответственный',
+    rulesRef: '{p} Правил оказания социальной поддержки',
+    perEvent: 'За каждое событие', perYears: 'Не чаще {n} раз(а) в {y}', oneYear: 'календарный год', nYears: '{n} года',
+    noLimit: 'Без ограничения по количеству', limitTimes: '{n} раз за период',
+    condStazh: 'Стаж в компании не менее {n}', condNone: 'Без дополнительных условий', condBenefit: 'Подтверждённая льготная категория «{b}»', condMilestone: 'Юбилейный стаж в текущем году: {list} лет',
+    calcTitle: 'Калькулятор', salary: 'Ваш оклад, ₸', salaryNote: 'Оклад используется только для расчёта на этой странице и никуда не сохраняется.',
+    calcBtn: 'Рассчитать', eligible: 'Положено', notEligible: 'Не положено', limitExhausted: 'Лимит исчерпан', amount: 'Размер', deduct: 'Удержания', toPay: 'К выплате',
+    disclaimer: 'Расчёт ориентировочный. Итоговую сумму определяет бухгалтерия.', enterSalary: 'Введите оклад, чтобы рассчитать размер.',
+    reasonStazh: 'Ваш стаж {have}, требуется не менее {need}.', reasonBenefit: 'Нет подтверждённой льготной категории «{b}».', reasonBenefitPending: 'Льготная категория «{b}» ещё не подтверждена HR.',
+    reasonMilestone: 'В {y} году ваш стаж составит {n} лет — это не юбилейная дата.', reasonLimit: 'Мера уже получена в пределах периода ({used} из {limit}).',
+    statusYear: 'Выплаты по этой мере в {y} году', notPaidYet: 'В {y} году не выплачивалась', leftInPeriod: 'Остаток в текущем периоде: {n}', eventNote: 'Выплачивается за каждое событие',
+    tplDownload: 'Скачать шаблон заявления', tplFormats: '.doc, автозаполнение из профиля', tplMissing: 'Шаблон заявления готовится. За образцом обратитесь: {who}, {contact}.',
+    howSubmit: 'Как подать заявление', submitWhere: 'Куда подавать', submitSystem: 'Система подачи заявлений', submitTbd: 'название и ссылка уточняются',
+    payCheck: 'Проверить выплату', payCheckSub: 'Выберите меру и год — покажем статус по реестру выплат.', measure: 'Мера поддержки', year: 'Год', check: 'Проверить',
+    stPaid: 'Выплачено', stNotPaidRight: 'Не выплачено, право есть', stNotPaidLimit: 'Не выплачено, лимит исчерпан', stNotPaidNoRight: 'Не выплачено, условия не выполнены',
+    order: 'Приказ', from: 'от', date: 'Дата', sum: 'Сумма', allMeasures: 'Все меры', allYears: 'Все годы',
+    myPayments: 'Все мои выплаты', noPayments: 'Выплат не найдено.', dataFrom: 'Данные доступны с {y} года.', pdf: 'Выгрузка в PDF — на этапе 3',
+    total: 'Итого',
+    tripTitle: 'Калькулятор командировки', tripSub: 'Категория должности берётся из профиля. Если для города нет отдельной нормы, применяется норма по стране.',
+    country: 'Страна', city: 'Город', cityAny: '— норма по стране —', dStart: 'Дата начала', dEnd: 'Дата окончания',
+    days: 'Дней в командировке', nights: 'Ночей проживания', dailyPer: 'Суточные в день', dailyTotal: 'Суточные за период', hotelPer: 'Лимит проживания за ночь', hotelTotal: 'Лимит проживания за период',
+    inNorm: 'В валюте нормы', inKzt: 'В тенге (ориентир)', kztNote: 'Сумма в тенге указана для ориентира по официальному курсу НБ РК на {d}.',
+    countryNorm: 'Для города нет отдельной нормы — применена норма по стране.', cityNorm: 'Применена отдельная норма по городу.',
+    taxOk: 'Суточные не превышают необлагаемый лимит ({lim} в день).', taxOver: 'Суточные превышают необлагаемый лимит ({lim} в день) на {over} в день. Превышение облагается ИПН.',
+    badDates: 'Дата окончания не может быть раньше даты начала.', nightsNote: 'Ночей = дней − 1. Порядок учёта дней выезда и возвращения уточняется бухгалтерией.',
+    normsTable: 'Нормы по стране для вашей категории', memo: 'Памятка командированного',
+    infoFaq: 'Частые вопросы', faqSearch: 'Поиск по вопросам', infoDocs: 'Документы', infoContacts: 'Контакты', download: 'Скачать', soon: 'Файл будет загружен',
+    admTitle: 'Админ-панель', admSub: 'Набор вкладок зависит от роли. Переключите роль в меню профиля (демо).', noAccess: 'Раздел доступен специалистам HR, бухгалтерии и администраторам. Переключите роль в меню профиля.',
+    tRegistry: 'Реестр выплат', tMeasures: 'Меры поддержки', tBase: 'Базовые величины', tRates: 'Курсы валют', tNorms: 'Нормы командировочных', tUsers: 'Пользователи', tJournal: 'Журнал действий',
+    regAdd: 'Внести выплату по приказу', orderNo: '№ приказа', orderDate: 'Дата приказа', payDate: 'Дата выплаты', employees: 'Работники', save: 'Сохранить', saveAnyway: 'Сохранить всё равно',
+    limitWarn: 'Внимание: лимит меры уже исчерпан у: {list}.', saved: 'Сохранено', fillAll: 'Заполните все поля и выберите хотя бы одного работника.',
+    employee: 'Работник', enteredBy: 'Кто внёс', calcType: 'Способ расчёта', template: 'Шаблон', yes: 'Есть', no: 'Нет',
+    mrp: 'МРП', mzp: 'МЗП', pdRk: 'Необлагаемые суточные по РК, МРП/день', pdAbroad: 'Необлагаемые суточные за рубежом, МРП/день',
+    currency: 'Валюта', rate: 'Курс, ₸', source: 'Источник', srcNb: 'НБ РК', srcManual: 'Ручной ввод', loadRates: 'Загрузить курсы НБ РК',
+    ratesLoaded: 'Демо: в рабочей версии курсы загружаются из НБ РК автоматически каждый день.',
+    validFrom: 'Действует с', when: 'Когда', who: 'Кто', what: 'Что изменено',
+    footer: 'Демо-прототип по PRD v1.0 от 08.10.2026. Все суммы, нормы и курсы — условные. Расчёты носят справочный характер и не являются основанием для выплаты.',
+    noTranslation: 'перевод отсутствует', tenge: '₸', yearsShort: 'г.'
+  },
+  kz: {
+    brand: 'Қолдау навигаторы', brandSub: 'Әлеуметтік қолдау және іссапарлар',
+    navHome: 'Басты бет', navSupport: 'Әлеуметтік қолдау', navPayments: 'Менің төлемдерім', navTrips: 'Іссапарлар', navInfo: 'Анықтама', navAdmin: 'Басқару панелі',
+    heroTitle: 'Сізге не тиесілі — бір минутта', heroSub: 'Әлеуметтік қолдау шарасын табыңыз, төлемдеріңізді тексеріңіз және іссапар шығындарын есептеңіз.',
+    searchPh: 'Мысалы: «бала туған кездегі көмек» немесе «тәуліктік Түркия»', searchEmpty: 'Ештеңе табылмады. Басқаша жазып көріңіз.',
+    tileSupport: 'Шаралар каталогы, шарттар және калькулятор', tilePayments: 'Жылдар бойынша төлемдер мәртебесі', tileTrips: 'Елдер бойынша тәуліктік және тұру', tileInfo: 'Сұрақтар, құжаттар, байланыс',
+    mayBeDue: 'Сізге тиесілі болуы мүмкін', mayBeDueSub: 'Профиліңіз шарттарына сәйкес келетін және {y} жылы әлі алынбаған шаралар', nothingDue: 'Қазір профиліңізге сәйкес шаралар жоқ.',
+    profile: 'Менің профилім', tabNo: 'Табель №', dept: 'Бөлімше', position: 'Лауазым', posCat: 'Лауазым санаты', hired: 'Жұмысқа қабылданған күн', stazh: 'Еңбек өтілі', benefits: 'Жеңілдікті санаттар',
+    notConfirmed: 'расталмаған', confirmedSt: 'расталған', role: 'Рөл (демо)', roleEmployee: 'Қызметкер', roleHr: 'HR маманы', roleAcc: 'Бухгалтерия', roleAdmin: 'Әкімші',
+    sso: 'Корпоративтік есептік жазба арқылы кірдіңіз', theme: 'Тақырып', themeAuto: 'Авто', themeLight: 'Ашық', themeDark: 'Қараңғы',
+    allCats: 'Барлығы', measuresCount: 'шара', open: 'Толығырақ',
+    fDesc: 'Сипаттама', fCond: 'Алу шарттары', fCalc: 'Мөлшері', fPeriod: 'Кезеңділігі', fLimit: 'Лимит', fDocs: 'Құжаттар', fDeadline: 'Беру мерзімі', fRule: 'Негіздеме', fOwner: 'Жауапты',
+    rulesRef: 'Әлеуметтік қолдау көрсету қағидаларының {p}',
+    perEvent: 'Әр оқиға үшін', perYears: '{y} ішінде {n} реттен жиі емес', oneYear: 'күнтізбелік жыл', nYears: '{n} жыл',
+    noLimit: 'Саны бойынша шектеусіз', limitTimes: 'Кезеңге {n} рет',
+    condStazh: 'Компаниядағы еңбек өтілі кемінде {n}', condNone: 'Қосымша шарттарсыз', condBenefit: '«{b}» расталған жеңілдікті санаты', condMilestone: 'Ағымдағы жылы мерейтойлық өтіл: {list} жыл',
+    calcTitle: 'Калькулятор', salary: 'Сіздің лауазымдық айлығыңыз, ₸', salaryNote: 'Айлық тек осы беттегі есептеу үшін қолданылады және ешқайда сақталмайды.',
+    calcBtn: 'Есептеу', eligible: 'Тиесілі', notEligible: 'Тиесілі емес', limitExhausted: 'Лимит таусылды', amount: 'Мөлшері', deduct: 'Ұстап қалулар', toPay: 'Төлеуге',
+    disclaimer: 'Есеп болжамды. Қорытынды соманы бухгалтерия анықтайды.', enterSalary: 'Мөлшерін есептеу үшін айлықты енгізіңіз.',
+    reasonStazh: 'Сіздің өтіліңіз {have}, кемінде {need} талап етіледі.', reasonBenefit: '«{b}» расталған жеңілдікті санаты жоқ.', reasonBenefitPending: '«{b}» жеңілдікті санатын HR әлі растаған жоқ.',
+    reasonMilestone: '{y} жылы өтіліңіз {n} жыл болады — бұл мерейтойлық күн емес.', reasonLimit: 'Шара кезең ішінде алынған ({used} / {limit}).',
+    statusYear: '{y} жылғы осы шара бойынша төлемдер', notPaidYet: '{y} жылы төленбеген', leftInPeriod: 'Ағымдағы кезеңдегі қалдық: {n}', eventNote: 'Әр оқиға үшін төленеді',
+    tplDownload: 'Өтініш үлгісін жүктеп алу', tplFormats: '.doc, профильден автоматты толтыру', tplMissing: 'Өтініш үлгісі дайындалуда. Үлгі үшін хабарласыңыз: {who}, {contact}.',
+    howSubmit: 'Өтінішті қалай беру керек', submitWhere: 'Қайда беру керек', submitSystem: 'Өтініш беру жүйесі', submitTbd: 'атауы мен сілтемесі нақтыланады',
+    payCheck: 'Төлемді тексеру', payCheckSub: 'Шара мен жылды таңдаңыз — төлемдер тізілімі бойынша мәртебені көрсетеміз.', measure: 'Қолдау шарасы', year: 'Жыл', check: 'Тексеру',
+    stPaid: 'Төленді', stNotPaidRight: 'Төленбеді, құқығы бар', stNotPaidLimit: 'Төленбеді, лимит таусылды', stNotPaidNoRight: 'Төленбеді, шарттар орындалмаған',
+    order: 'Бұйрық', from: 'күні', date: 'Күні', sum: 'Сомасы', allMeasures: 'Барлық шаралар', allYears: 'Барлық жылдар',
+    myPayments: 'Менің барлық төлемдерім', noPayments: 'Төлемдер табылмады.', dataFrom: 'Деректер {y} жылдан бастап қолжетімді.', pdf: 'PDF-ке жүктеу — 3-кезеңде',
+    total: 'Барлығы',
+    tripTitle: 'Іссапар калькуляторы', tripSub: 'Лауазым санаты профильден алынады. Қала үшін жеке норма болмаса, ел бойынша норма қолданылады.',
+    country: 'Ел', city: 'Қала', cityAny: '— ел бойынша норма —', dStart: 'Басталу күні', dEnd: 'Аяқталу күні',
+    days: 'Іссапар күндері', nights: 'Тұру түндері', dailyPer: 'Күніне тәуліктік', dailyTotal: 'Кезеңге тәуліктік', hotelPer: 'Бір түнге тұру лимиті', hotelTotal: 'Кезеңге тұру лимиті',
+    inNorm: 'Норма валютасында', inKzt: 'Теңгемен (бағдар)', kztNote: 'Теңгедегі сома ҚР ҰБ-ның {d} ресми бағамы бойынша бағдар үшін көрсетілген.',
+    countryNorm: 'Қала үшін жеке норма жоқ — ел бойынша норма қолданылды.', cityNorm: 'Қала бойынша жеке норма қолданылды.',
+    taxOk: 'Тәуліктік салық салынбайтын лимиттен аспайды (күніне {lim}).', taxOver: 'Тәуліктік салық салынбайтын лимиттен (күніне {lim}) күніне {over} асады. Асып кеткен сомаға ЖТС салынады.',
+    badDates: 'Аяқталу күні басталу күнінен ерте болмауы керек.', nightsNote: 'Түндер = күндер − 1. Кету және оралу күндерін есепке алу тәртібін бухгалтерия нақтылайды.',
+    normsTable: 'Сіздің санатыңыз үшін ел бойынша нормалар', memo: 'Іссапарға жіберілген қызметкерге жадынама',
+    infoFaq: 'Жиі қойылатын сұрақтар', faqSearch: 'Сұрақтар бойынша іздеу', infoDocs: 'Құжаттар', infoContacts: 'Байланыс', download: 'Жүктеп алу', soon: 'Файл жүктеледі',
+    admTitle: 'Басқару панелі', admSub: 'Қойындылар жиынтығы рөлге байланысты. Рөлді профиль мәзірінде ауыстырыңыз (демо).', noAccess: 'Бөлім HR, бухгалтерия мамандары мен әкімшілерге қолжетімді. Рөлді профиль мәзірінде ауыстырыңыз.',
+    tRegistry: 'Төлемдер тізілімі', tMeasures: 'Қолдау шаралары', tBase: 'Базалық шамалар', tRates: 'Валюта бағамдары', tNorms: 'Іссапар нормалары', tUsers: 'Пайдаланушылар', tJournal: 'Әрекеттер журналы',
+    regAdd: 'Бұйрық бойынша төлемді енгізу', orderNo: 'Бұйрық №', orderDate: 'Бұйрық күні', payDate: 'Төлем күні', employees: 'Қызметкерлер', save: 'Сақтау', saveAnyway: 'Бәрібір сақтау',
+    limitWarn: 'Назар аударыңыз: шара лимиті таусылған: {list}.', saved: 'Сақталды', fillAll: 'Барлық өрістерді толтырып, кемінде бір қызметкерді таңдаңыз.',
+    employee: 'Қызметкер', enteredBy: 'Кім енгізді', calcType: 'Есептеу тәсілі', template: 'Үлгі', yes: 'Бар', no: 'Жоқ',
+    mrp: 'АЕК', mzp: 'ЕТЖ', pdRk: 'ҚР бойынша салық салынбайтын тәуліктік, АЕК/күн', pdAbroad: 'Шетелдегі салық салынбайтын тәуліктік, АЕК/күн',
+    currency: 'Валюта', rate: 'Бағам, ₸', source: 'Көзі', srcNb: 'ҚР ҰБ', srcManual: 'Қолмен енгізу', loadRates: 'ҚР ҰБ бағамдарын жүктеу',
+    ratesLoaded: 'Демо: жұмыс нұсқасында бағамдар ҚР ҰБ-дан күн сайын автоматты түрде жүктеледі.',
+    validFrom: 'Қолданылу басы', when: 'Қашан', who: 'Кім', what: 'Не өзгерді',
+    footer: '08.10.2026 PRD v1.0 бойынша демо-прототип. Барлық сомалар, нормалар мен бағамдар шартты. Есептеулер анықтамалық сипатта және төлемге негіз болып табылмайды.',
+    noTranslation: 'аударма жоқ', tenge: '₸', yearsShort: 'ж.'
+  }
+};
+
+/* ============================================================
+   СОСТОЯНИЕ И УТИЛИТЫ
+   ============================================================ */
+function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+const state = { lang: store('nav-lang') === 'kz' ? 'kz' : 'ru', role: 'employee', theme: store('nav-theme') || 'auto', adminTab: null, catFilter: 'all' };
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+function t(k, vars) { let s = (T[state.lang][k] ?? T.ru[k] ?? k); if (vars) for (const v in vars) s = s.split('{' + v + '}').join(vars[v]); return s; }
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function L(o) { return o ? (o[state.lang] || o.ru || o.kz || '') : ''; }
+function Lx(o) { // с пометкой «перевод отсутствует»
+  if (!o) return '';
+  if (o[state.lang]) return esc(o[state.lang]);
+  const other = o.ru || o.kz;
+  return other ? esc(other) + ' <span class="pill pill-warn">' + t('noTranslation') + '</span>' : '';
+}
+function money(n) { return n == null ? '—' : Math.round(n).toLocaleString('ru-RU').replace(/,/g, ' ') + ' ₸'; }
+function num(n, d = 0) { return Number(n).toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function curFmt(n, cur) { return cur === 'MRP' ? num(n, n % 1 ? 1 : 0) + ' ' + t('mrp') : num(n, n % 1 ? 2 : 0) + ' ' + cur; }
+function dfmt(iso) { if (!iso) return '—'; const d = typeof iso === 'string' ? new Date(iso + 'T00:00:00') : iso; return d.toLocaleDateString('ru-RU'); }
+function isoDate(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function baseFor(y) { return BASE[y] || BASE[Math.max(...Object.keys(BASE).map(Number))]; }
+function measure(id) { return MEASURES.find(m => m.id === id); }
+function cat(id) { return CATS.find(c => c.id === id); }
+function yearsWord(n) {
+  if (state.lang === 'kz') return n + ' жыл';
+  const a = Math.abs(n) % 100, b = a % 10;
+  return n + ' ' + (a > 10 && a < 20 ? 'лет' : b === 1 ? 'год' : b >= 2 && b <= 4 ? 'года' : 'лет');
+}
+function stazhYears(at = TODAY) { const h = new Date(PROFILE.hired + 'T00:00:00'); return (at - h) / (365.25 * 864e5); }
+function stazhText() {
+  const y = Math.floor(stazhYears()), mo = Math.floor((stazhYears() - y) * 12);
+  return state.lang === 'kz' ? `${y} жыл ${mo} ай` : `${yearsWord(y)} ${mo} мес.`;
+}
+function needText(n) { return n < 1 ? (state.lang === 'kz' ? Math.round(n * 12) + ' ай' : Math.round(n * 12) + ' мес.') : yearsWord(n); }
+function toast(msg) { const el = $('#toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 3200); }
+
+/* ---------- Логика мер ---------- */
+function calcText(m) {
+  const k = m.calc.k;
+  switch (m.calc.type) {
+    case 'fixed': return money(k);
+    case 'mrp': return `${k} ${t('mrp')}`;
+    case 'mzp': return `${k} ${t('mzp')}`;
+    case 'salary': return state.lang === 'kz' ? (k === 1 ? '1 лауазымдық айлық' : `${k} айлық`) : (k === 1 ? '1 должностной оклад' : `${k} оклада`);
+  }
+}
+function amountOf(m, salary, year = CUR_YEAR) {
+  const b = baseFor(year), k = m.calc.k;
+  switch (m.calc.type) {
+    case 'fixed': return k;
+    case 'mrp': return k * b.MRP;
+    case 'mzp': return k * b.MZP;
+    case 'salary': return salary > 0 ? k * salary : null;
+  }
+}
+function amountPreview(m) {
+  if (m.calc.type === 'salary') return calcText(m);
+  return money(amountOf(m)) + (m.calc.type === 'fixed' ? '' : ' <span class="muted small">(' + calcText(m) + ')</span>');
+}
+function periodText(m) {
+  if (m.period.type === 'event') return t('perEvent');
+  const y = m.period.n === 1 ? t('oneYear') : t('nYears', { n: m.period.n });
+  return t('perYears', { n: m.period.limit, y });
+}
+function limitText(m) { return m.period.type === 'event' ? t('noLimit') : t('limitTimes', { n: m.period.limit }); }
+function condText(m) {
+  const c = m.cond;
+  if (c.benefit) return t('condBenefit', { b: L(BENEFITS[c.benefit]) });
+  if (c.milestone) return t('condMilestone', { list: c.milestone.join(', ') });
+  if (c.minYears) return t('condStazh', { n: needText(c.minYears) });
+  return t('condNone');
+}
+function paymentsOf(emp, mid, year) { return PAYMENTS.filter(p => p.emp === emp && (!mid || p.m === mid) && (!year || +p.date.slice(0, 4) === year)); }
+function limitState(m, emp = PROFILE.tab, year = CUR_YEAR) {
+  if (m.period.type === 'event') return { event: true, exhausted: false };
+  const from = year - m.period.n + 1;
+  const used = PAYMENTS.filter(p => p.emp === emp && p.m === m.id && +p.date.slice(0, 4) >= from && +p.date.slice(0, 4) <= year).length;
+  return { used, limit: m.period.limit, left: Math.max(0, m.period.limit - used), exhausted: used >= m.period.limit };
+}
+function checkConditions(m) {
+  const c = m.cond, reasons = [];
+  if (c.minYears && stazhYears() < c.minYears) reasons.push(t('reasonStazh', { have: stazhText(), need: needText(c.minYears) }));
+  if (c.benefit) {
+    const b = PROFILE.benefits.find(x => x.code === c.benefit);
+    if (!b) reasons.push(t('reasonBenefit', { b: L(BENEFITS[c.benefit]) }));
+    else if (b.status !== 'confirmed') reasons.push(t('reasonBenefitPending', { b: L(BENEFITS[c.benefit]) }));
+  }
+  if (c.milestone) {
+    const n = CUR_YEAR - +PROFILE.hired.slice(0, 4);
+    if (!c.milestone.includes(n)) reasons.push(t('reasonMilestone', { y: CUR_YEAR, n }));
+  }
+  return reasons;
+}
+
+/* ---------- Командировки ---------- */
+function tripNorm(country, cityIdx, catNo) {
+  const c = COUNTRIES.find(x => x.code === country); if (!c) return null;
+  const city = cityIdx !== '' && cityIdx != null ? c.cities[+cityIdx] : null;
+  const i = catNo - 1;
+  const own = city && (city.hotel || city.daily);
+  return { c, city, cur: c.cur, daily: (city && city.daily ? city.daily : c.daily)[i], hotel: (city && city.hotel ? city.hotel : c.hotel)[i], cityOwn: !!own };
+}
+function toKzt(v, cur) { return cur === 'MRP' ? v * baseFor(CUR_YEAR).MRP : cur === 'KZT' ? v : v * (RATES.list[cur] || 0); }
+
+/* ============================================================
+   ИКОНКИ
+   ============================================================ */
+const IC = {
+  heart: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+  wallet: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="15" rx="2"/><path d="M16 12h2M2 9h20"/></svg>',
+  plane: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>',
+  info: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>',
+  search: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>',
+  check: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  x: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  alert: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></svg>',
+  doc: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/></svg>',
+  pin: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>'
+};
+
+const HERO_ART = `<svg class="hero-art" viewBox="0 0 300 250" aria-hidden="true">
+  <defs><linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs>
+  <circle cx="230" cy="60" r="38" fill="rgba(255,255,255,.18)"/>
+  <rect x="40" y="40" width="180" height="140" rx="22" fill="#fff" transform="rotate(-6 130 110)"/>
+  <g transform="rotate(-6 130 110)">
+    <rect x="62" y="64" width="44" height="44" rx="12" fill="#f0e8ff"/>
+    <path d="M84 98s-12-7-12-15a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 8-12 15-12 15z" fill="#db2777"/>
+    <rect x="118" y="68" width="80" height="10" rx="5" fill="#e9e2fb"/>
+    <rect x="118" y="86" width="56" height="10" rx="5" fill="#f3eefe"/>
+    <rect x="62" y="124" width="136" height="12" rx="6" fill="#f3eefe"/>
+    <rect x="62" y="124" width="92" height="12" rx="6" fill="#7c3aed"/>
+    <rect x="62" y="148" width="70" height="18" rx="9" fill="#10b981"/>
+    <path d="m76 157 5 5 9-9" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <circle cx="232" cy="178" r="30" fill="url(#hg1)"/>
+  <text x="232" y="188" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="800" font-size="28" fill="#fff">₸</text>
+  <circle cx="262" cy="140" r="16" fill="url(#hg1)" opacity=".85"/>
+  <g transform="translate(222 18) rotate(18)">
+    <rect x="0" y="0" width="58" height="58" rx="16" fill="#06b6d4"/>
+    <path d="M42 36 36 22l5-5c2-2 2-4 1-5-1-1-3 0-5 1l-5 5-14-6-3 3 11 8-5 5h-5l-2 2 6 3 3 6 2-2v-5l5-5 8 11z" fill="#fff"/>
+  </g>
+  <circle cx="30" cy="200" r="10" fill="rgba(255,255,255,.5)"/>
+  <circle cx="58" cy="226" r="6" fill="rgba(255,255,255,.35)"/>
+</svg>`;
+
+/* ============================================================
+   СТРАНИЦЫ
+   ============================================================ */
+function pageHome() {
+  const due = MEASURES.filter(m => m.suggest && !checkConditions(m).length && !limitState(m).exhausted && !paymentsOf(PROFILE.tab, m.id, CUR_YEAR).length);
+  const chipsRu = ['помощь при рождении ребёнка', 'суточные Турция', 'оздоровление', 'Москва'];
+  const chipsKz = ['бала туған', 'тәуліктік Түркия', 'сауықтыру', 'Мәскеу'];
+  return `
+  <section class="hero">
+    ${HERO_ART}
+    <h1>${t('heroTitle')}</h1>
+    <p>${t('heroSub')}</p>
+    <div class="search">${IC.search}<input id="q" type="search" autocomplete="off" placeholder="${esc(t('searchPh'))}" aria-label="${esc(t('searchPh'))}"></div>
+    <div class="results" id="results"></div>
+    <div class="chips">${(state.lang === 'kz' ? chipsKz : chipsRu).map(c => `<button class="chip" data-q="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+  </section>
+
+  <section class="section grid g4">
+    <a class="card tile" href="#/support" style="--g:${PAGE_GRADS.support}"><div class="tile-ico">${IC.heart}</div><h3>${t('navSupport')}</h3><p class="muted small">${t('tileSupport')}</p></a>
+    <a class="card tile" href="#/payments" style="--g:${PAGE_GRADS.payments}"><div class="tile-ico">${IC.wallet}</div><h3>${t('navPayments')}</h3><p class="muted small">${t('tilePayments')}</p></a>
+    <a class="card tile" href="#/trips" style="--g:${PAGE_GRADS.trips}"><div class="tile-ico">${IC.plane}</div><h3>${t('navTrips')}</h3><p class="muted small">${t('tileTrips')}</p></a>
+    <a class="card tile" href="#/info" style="--g:${PAGE_GRADS.info}"><div class="tile-ico">${IC.info}</div><h3>${t('navInfo')}</h3><p class="muted small">${t('tileInfo')}</p></a>
+  </section>
+
+  <section class="section split">
+    <div>
+      <div class="section-head"><h2>${t('mayBeDue')}</h2></div>
+      <p class="muted small" style="margin-top:-6px">${t('mayBeDueSub', { y: CUR_YEAR })}</p>
+      <div class="grid g2">
+        ${due.length ? due.map(measureCard).join('') : `<div class="card muted">${t('nothingDue')}</div>`}
+      </div>
+    </div>
+    <aside class="card">
+      <h3>${t('profile')}</h3>
+      ${profileKv()}
+    </aside>
+  </section>`;
+}
+
+function profileKv() {
+  const b = PROFILE.benefits.map(x => `${esc(L(BENEFITS[x.code]))} <span class="pill ${x.status === 'confirmed' ? 'pill-ok' : 'pill-warn'}">${x.status === 'confirmed' ? t('confirmedSt') : t('notConfirmed')}</span>`).join('<br>') || '—';
+  return `
+    <div class="kv"><span>${t('tabNo')}</span><span class="num">${PROFILE.tab}</span></div>
+    <div class="kv"><span>${t('dept')}</span><span style="text-align:right">${esc(L(PROFILE.dept))}</span></div>
+    <div class="kv"><span>${t('position')}</span><span style="text-align:right">${esc(L(PROFILE.pos))}</span></div>
+    <div class="kv"><span>${t('posCat')}</span><span style="text-align:right">${esc(L(POS_CATS[PROFILE.cat]))}</span></div>
+    <div class="kv"><span>${t('hired')}</span><span>${dfmt(PROFILE.hired)}</span></div>
+    <div class="kv"><span>${t('stazh')}</span><span>${stazhText()}</span></div>
+    <div class="kv"><span>${t('benefits')}</span><span style="text-align:right">${b}</span></div>`;
+}
+
+function measureCard(m) {
+  const ls = limitState(m), paid = paymentsOf(PROFILE.tab, m.id, CUR_YEAR).length;
+  const badge = ls.exhausted ? `<span class="pill pill-bad">${t('limitExhausted')}</span>` : paid ? `<span class="pill pill-ok">${t('stPaid')} ${CUR_YEAR}</span>` : '';
+  const c = cat(m.cat);
+  return `<a class="card mcard" href="#/measure/${m.id}" style="--c:${c.color}">
+    <span class="emoji" aria-hidden="true">${c.emoji}</span>
+    <span class="pill pill-cat" style="align-self:flex-start">${esc(L(c))}</span>
+    <h3 style="margin:0">${esc(L(m.title))}</h3>
+    <div class="amt num">${amountPreview(m)}</div>
+    <div class="row"><span class="muted small">${periodText(m)}</span>${badge}</div>
+  </a>`;
+}
+
+function pageSupport() {
+  const list = MEASURES.filter(m => state.catFilter === 'all' || m.cat === state.catFilter);
+  return `
+  ${banner('support', t('navSupport'), `${MEASURES.length} ${t('measuresCount')} · ${t('mrp')} ${CUR_YEAR} = ${money(baseFor(CUR_YEAR).MRP)} · ${t('mzp')} ${CUR_YEAR} = ${money(baseFor(CUR_YEAR).MZP)}`, '💜')}
+  <div class="cat-filter">
+    <button class="fbtn ${state.catFilter === 'all' ? 'on' : ''}" data-cat="all">✨ ${t('allCats')}</button>
+    ${CATS.map(c => `<button class="fbtn ${state.catFilter === c.id ? 'on' : ''}" data-cat="${c.id}">${c.emoji} ${esc(L(c))}</button>`).join('')}
+  </div>
+  <div class="grid g3">${list.map(measureCard).join('')}</div>`;
+}
+
+function pageMeasure(id) {
+  const m = measure(id);
+  if (!m) return `<div class="card">404</div>`;
+  const owner = OWNERS[m.owner];
+  const docs = (m.docs[state.lang] && m.docs[state.lang].length ? m.docs[state.lang] : m.docs.ru);
+  return `
+  ${banner(`linear-gradient(120deg,${cat(m.cat).color},#7c3aed)`, Lx(m.title), '', cat(m.cat).emoji, `<div class="crumbs"><a href="#/support">${t('navSupport')}</a> / ${esc(L(cat(m.cat)))}</div>`)}
+  <div class="split">
+    <div>
+      <div class="card">
+        <dl class="dl">
+          <dt>${t('fDesc')}</dt><dd>${Lx(m.desc)}</dd>
+          <dt>${t('fCond')}</dt><dd>${condText(m)}</dd>
+          <dt>${t('fCalc')}</dt><dd class="num"><strong>${calcText(m)}</strong>${m.calc.type === 'mrp' || m.calc.type === 'mzp' ? ` = ${money(amountOf(m))} <span class="muted small">(${CUR_YEAR})</span>` : ''}</dd>
+          <dt>${t('fPeriod')}</dt><dd>${periodText(m)}</dd>
+          <dt>${t('fLimit')}</dt><dd>${limitText(m)}</dd>
+          <dt>${t('fDocs')}</dt><dd><ul>${docs.map(d => `<li>${esc(d)}</li>`).join('')}</ul></dd>
+          <dt>${t('fDeadline')}</dt><dd>${Lx(m.deadline)}</dd>
+          <dt>${t('fRule')}</dt><dd>${t('rulesRef', { p: m.rule })}</dd>
+          <dt>${t('fOwner')}</dt><dd>${esc(L(owner))}<br><span class="muted small">${esc(owner.contact)}</span></dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>${t('statusYear', { y: CUR_YEAR })}</h3>
+        ${statusBlock(m, CUR_YEAR)}
+      </div>
+    </div>
+    <aside class="sticky">
+      <div class="card">
+        <h3>${t('calcTitle')}</h3>
+        ${m.calc.type === 'salary' ? `
+          <div class="field"><label for="salary">${t('salary')}</label><input id="salary" type="number" min="0" step="1000" inputmode="numeric" placeholder="450 000" autocomplete="off"><span class="hint">${t('salaryNote')}</span></div>` : ''}
+        <button class="btn btn-block" id="calcBtn">${t('calcBtn')}</button>
+        <div id="calcOut"></div>
+      </div>
+    </aside>
+  </div>`;
+}
+
+function statusBlock(m, year) {
+  const pays = paymentsOf(PROFILE.tab, m.id, year);
+  const ls = limitState(m, PROFILE.tab, year);
+  let html = '';
+  if (pays.length) {
+    html += pays.map(p => `<div class="kv"><span><span class="pill pill-ok">${t('stPaid')}</span> ${dfmt(p.date)}</span><span class="num">${money(p.sum)}</span></div>
+      <div class="muted small" style="margin:-4px 0 6px">${t('order')} № ${esc(p.order)} ${t('from')} ${dfmt(p.orderDate)}</div>`).join('');
+  } else html += `<p class="muted" style="margin:0">${t('notPaidYet', { y: year })}</p>`;
+  html += `<p class="small muted" style="margin:8px 0 0">${ls.event ? t('eventNote') : t('leftInPeriod', { n: `${ls.left} / ${ls.limit}` })}</p>`;
+  return html;
+}
+
+function runCalc(m) {
+  const out = $('#calcOut');
+  const salaryEl = $('#salary');
+  const salary = salaryEl ? Number(salaryEl.value) : 0;
+  const reasons = checkConditions(m);
+  const ls = limitState(m);
+  const amount = amountOf(m, salary);
+  let cls, head, icon;
+  if (reasons.length) { cls = 'bad'; head = t('notEligible'); icon = IC.x; }
+  else if (ls.exhausted) { cls = 'warn'; head = t('limitExhausted'); icon = IC.alert; reasons.push(t('reasonLimit', { used: ls.used, limit: ls.limit })); }
+  else { cls = 'ok'; head = t('eligible'); icon = IC.check; }
+
+  let rows = '';
+  if (amount == null) rows = `<p class="small" style="margin:8px 0 0">${t('enterSalary')}</p>`;
+  else {
+    const ded = (m.deduct || []).map(d => ({ name: `${L(d)} ${d.pct}%`, v: amount * d.pct / 100 }));
+    const net = amount - ded.reduce((s, d) => s + d.v, 0);
+    rows = `<table class="sumrows num">
+      <tr><td>${t('amount')} <span class="muted small">(${calcText(m)})</span></td><td>${money(amount)}</td></tr>
+      ${ded.map(d => `<tr><td>${t('deduct')}: ${esc(d.name)}</td><td>− ${money(d.v)}</td></tr>`).join('')}
+      <tr class="total"><td>${t('toPay')}</td><td>${money(net)}</td></tr></table>`;
+  }
+  const owner = OWNERS[m.owner];
+  const tpl = m.tpl
+    ? `<button class="btn btn-block" id="tplBtn" style="margin-top:14px">${IC.doc} ${t('tplDownload')}</button><p class="hint" style="text-align:center;margin-top:6px">${t('tplFormats')}</p>`
+    : `<div class="callout warn" style="margin-top:14px">${t('tplMissing', { who: esc(L(owner)), contact: esc(owner.contact) })}</div>`;
+  const docs = (m.docs[state.lang] && m.docs[state.lang].length ? m.docs[state.lang] : m.docs.ru);
+  out.innerHTML = `
+    <div class="result ${cls}">
+      <h3>${icon} ${head}</h3>
+      ${reasons.map(r => `<p class="small" style="margin:4px 0">${esc(r)}</p>`).join('')}
+      ${rows}
+    </div>
+    <div class="note">${IC.info}<span>${t('disclaimer')}</span></div>
+    ${tpl}
+    <div style="margin-top:16px">
+      <h3>${t('howSubmit')}</h3>
+      <div class="kv"><span>${t('submitWhere')}</span><span style="text-align:right"><a href="#" onclick="return false">${t('submitSystem')}</a><br><span class="muted small">${t('submitTbd')}</span></span></div>
+      <div class="kv"><span>${t('fDocs')}</span><span style="text-align:right">${docs.map(esc).join('<br>')}</span></div>
+      <div class="kv"><span>${t('fDeadline')}</span><span style="text-align:right">${esc(L(m.deadline))}</span></div>
+      <div class="kv"><span>${t('fOwner')}</span><span style="text-align:right">${esc(L(owner))}<br><span class="muted small">${esc(owner.contact)}</span></span></div>
+    </div>`;
+  const b = $('#tplBtn'); if (b) b.onclick = () => downloadTemplate(m);
+}
+
+function downloadTemplate(m) {
+  const kz = state.lang === 'kz';
+  const html = `<html><head><meta charset="utf-8"><title>${esc(L(m.title))}</title></head>
+<body style="font-family:'Times New Roman',serif;font-size:14pt;line-height:1.5">
+<p style="text-align:right">${kz ? 'Әлеуметтік қолдау бөлімінің басшысына' : 'Руководителю отдела социальной поддержки'}<br>
+${kz ? 'кімнен' : 'от'} ${esc(L(PROFILE.pos))}<br>${esc(L(PROFILE.dept))}<br>${esc(PROFILE.fio)}<br>${kz ? 'Табель №' : 'Табельный №'} ${PROFILE.tab}</p>
+<h2 style="text-align:center">${kz ? 'ӨТІНІШ' : 'ЗАЯВЛЕНИЕ'}</h2>
+<p>${kz ? `Маған «${esc(L(m.title))}» шарасын ${esc(m.rule)} Әлеуметтік қолдау көрсету қағидаларына сәйкес көрсетуіңізді сұраймын.` : `Прошу оказать мне меру социальной поддержки «${esc(L(m.title))}» в соответствии с ${esc(m.rule)} Правил оказания социальной поддержки.`}</p>
+<p>${kz ? 'Қосымша:' : 'Приложение:'}</p><ol>${(m.docs[state.lang] || m.docs.ru).filter((d, i) => i > 0).map(d => `<li>${esc(d)}</li>`).join('') || '<li>—</li>'}</ol>
+<p><br>${dfmt(TODAY)} &nbsp;&nbsp;&nbsp;&nbsp; _______________ / ${esc(PROFILE.short)}</p>
+</body></html>`;
+  const blob = new Blob(['﻿' + html], { type: 'application/msword' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `zayavlenie_${m.id}_${state.lang}.doc`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function pagePayments() {
+  const years = [CUR_YEAR, CUR_YEAR - 1, CUR_YEAR - 2];
+  return `
+  ${banner('payments', t('navPayments'), t('payCheckSub'), '💰')}
+  <div class="split">
+    <div class="card">
+      <h2>${t('myPayments')}</h2>
+      <div class="row-fields">
+        <div class="field"><label for="fMeasure">${t('measure')}</label><select id="fMeasure"><option value="">${t('allMeasures')}</option>${MEASURES.map(m => `<option value="${m.id}">${esc(L(m.title))}</option>`).join('')}</select></div>
+        <div class="field"><label for="fYear">${t('year')}</label><select id="fYear"><option value="">${t('allYears')}</option>${years.map(y => `<option>${y}</option>`).join('')}</select></div>
+      </div>
+      <div id="payTable"></div>
+      <p class="hint" style="margin-top:10px">${t('dataFrom', { y: REG_START })} ${t('pdf')}.</p>
+    </div>
+    <aside class="card sticky">
+      <h2>${t('payCheck')}</h2>
+      <div class="field"><label for="cMeasure">${t('measure')}</label><select id="cMeasure">${MEASURES.map(m => `<option value="${m.id}">${esc(L(m.title))}</option>`).join('')}</select></div>
+      <div class="field"><label for="cYear">${t('year')}</label><select id="cYear">${years.map(y => `<option>${y}</option>`).join('')}</select></div>
+      <button class="btn btn-block" id="cBtn">${t('check')}</button>
+      <div id="cOut"></div>
+    </aside>
+  </div>`;
+}
+
+function renderPayTable() {
+  const mid = $('#fMeasure').value, y = $('#fYear').value ? +$('#fYear').value : null;
+  const wrap = $('#payTable');
+  if (y && y < REG_START) { wrap.innerHTML = `<div class="callout">${t('dataFrom', { y: REG_START })}</div>`; return; }
+  const rows = paymentsOf(PROFILE.tab, mid, y).sort((a, b) => b.date.localeCompare(a.date));
+  const total = rows.reduce((s, p) => s + p.sum, 0);
+  wrap.innerHTML = `<div class="table-wrap"><table class="t">
+    <thead><tr><th>${t('date')}</th><th>${t('measure')}</th><th>${t('order')}</th><th class="r">${t('sum')}</th></tr></thead>
+    <tbody>${rows.length ? rows.map(p => `<tr><td class="num">${dfmt(p.date)}</td><td>${esc(L(measure(p.m).title))}</td><td class="num">№ ${esc(p.order)} ${t('from')} ${dfmt(p.orderDate)}</td><td class="r num">${money(p.sum)}</td></tr>`).join('')
+      : `<tr class="empty-row"><td colspan="4">${t('noPayments')}</td></tr>`}
+    ${rows.length > 1 ? `<tr><td colspan="3"><strong>${t('total')}</strong></td><td class="r num"><strong>${money(total)}</strong></td></tr>` : ''}
+    </tbody></table></div>`;
+}
+
+function runPayCheck() {
+  const m = measure($('#cMeasure').value), y = +$('#cYear').value, out = $('#cOut');
+  if (y < REG_START) { out.innerHTML = `<div class="result"><p style="margin:0">${t('dataFrom', { y: REG_START })}</p></div>`; return; }
+  const pays = paymentsOf(PROFILE.tab, m.id, y), ls = limitState(m, PROFILE.tab, y);
+  let html;
+  if (pays.length) {
+    html = `<div class="result ok"><h3>${IC.check} ${t('stPaid')}</h3>${pays.map(p => `
+      <div class="kv"><span>${t('date')}</span><span class="num">${dfmt(p.date)}</span></div>
+      <div class="kv"><span>${t('sum')}</span><span class="num"><strong>${money(p.sum)}</strong></span></div>
+      <div class="kv"><span>${t('order')}</span><span class="num">№ ${esc(p.order)} ${t('from')} ${dfmt(p.orderDate)}</span></div>`).join('')}
+      <p class="small" style="margin:8px 0 0">${ls.event ? t('eventNote') : t('leftInPeriod', { n: `${ls.left} / ${ls.limit}` })}</p></div>`;
+  } else if (ls.exhausted) {
+    html = `<div class="result warn"><h3>${IC.alert} ${t('stNotPaidLimit')}</h3><p class="small" style="margin:0">${t('reasonLimit', { used: ls.used, limit: ls.limit })}</p></div>`;
+  } else {
+    const r = checkConditions(m);
+    html = r.length
+      ? `<div class="result bad"><h3>${IC.x} ${t('stNotPaidNoRight')}</h3>${r.map(x => `<p class="small" style="margin:0">${esc(x)}</p>`).join('')}</div>`
+      : `<div class="result ok"><h3>${IC.check} ${t('stNotPaidRight')}</h3><p class="small" style="margin:0">${ls.event ? t('eventNote') : t('leftInPeriod', { n: `${ls.left} / ${ls.limit}` })}</p><p style="margin:10px 0 0"><a href="#/measure/${m.id}">${t('calcBtn')} →</a></p></div>`;
+  }
+  out.innerHTML = html;
+}
+
+function pageTrips(params) {
+  const pre = params.get('c') || 'TR';
+  const preCity = params.get('city') ?? '';
+  const s = new Date(TODAY); s.setDate(s.getDate() + 7);
+  const e = new Date(s); e.setDate(e.getDate() + 4);
+  const memo = state.lang === 'kz'
+    ? ['Іссапарға шыққанға дейін бұйрықпен танысып, аванс алыңыз.', 'Аванстық есепті оралғаннан кейін 3 жұмыс күні ішінде тапсырыңыз.', 'Тұру шығындарын шот-фактура мен төлем чегімен растаңыз.', 'Билеттер мен отырғызу талондарын сақтаңыз.', 'Шетелдік құжаттар ресми аудармамен ұсынылады.']
+    : ['До выезда ознакомьтесь с приказом о командировке и получите аванс.', 'Авансовый отчёт сдаётся в течение 3 рабочих дней после возвращения.', 'Расходы на проживание подтверждаются счётом-фактурой и чеком об оплате.', 'Сохраняйте билеты и посадочные талоны.', 'Документы на иностранном языке представляются с переводом.'];
+  return `
+  ${banner('trips', t('navTrips'), t('tripSub'), '✈️')}
+  <div class="split">
+    <div>
+      <div class="card">
+        <h2>${t('tripTitle')}</h2>
+        <div class="callout" style="margin-bottom:16px">${t('posCat')}: <strong>${esc(L(POS_CATS[PROFILE.cat]))}</strong></div>
+        <div class="row-fields">
+          <div class="field"><label for="tCountry">${t('country')}</label><select id="tCountry">${COUNTRIES.map(c => `<option value="${c.code}" ${c.code === pre ? 'selected' : ''}>${esc(L(c))}</option>`).join('')}</select></div>
+          <div class="field"><label for="tCity">${t('city')}</label><select id="tCity"></select></div>
+          <div class="field"><label for="tStart">${t('dStart')}</label><input id="tStart" type="date" value="${isoDate(s)}"></div>
+          <div class="field"><label for="tEnd">${t('dEnd')}</label><input id="tEnd" type="date" value="${isoDate(e)}"></div>
+        </div>
+        <div id="tripOut"></div>
+      </div>
+      <div class="card">
+        <h3>${t('normsTable')}</h3>
+        <div id="normTable"></div>
+      </div>
+    </div>
+    <aside class="card sticky">
+      <h3>${t('memo')}</h3>
+      <ol style="padding-left:18px;margin:0">${memo.map(x => `<li style="margin-bottom:8px">${esc(x)}</li>`).join('')}</ol>
+    </aside>
+  </div>`;
+  // preCity используется в afterTrips
+}
+
+function fillCities(preCity) {
+  const c = COUNTRIES.find(x => x.code === $('#tCountry').value);
+  $('#tCity').innerHTML = `<option value="">${t('cityAny')}</option>` + c.cities.map((ct, i) => `<option value="${i}">${esc(L(ct))}</option>`).join('');
+  if (preCity !== undefined && preCity !== '') $('#tCity').value = preCity;
+}
+
+function runTrip() {
+  const out = $('#tripOut');
+  const s = $('#tStart').value, e = $('#tEnd').value;
+  const n = tripNorm($('#tCountry').value, $('#tCity').value, PROFILE.cat);
+  renderNormTable(n.c);
+  if (!s || !e) { out.innerHTML = ''; return; }
+  const days = Math.round((new Date(e + 'T00:00:00') - new Date(s + 'T00:00:00')) / 864e5) + 1;
+  if (days < 1) { out.innerHTML = `<div class="result bad"><h3>${IC.x} ${t('badDates')}</h3></div>`; return; }
+  const nights = days - 1;
+  const b = baseFor(CUR_YEAR);
+  const dailyKzt = toKzt(n.daily, n.cur);
+  const limMrp = n.c.code === 'KZ' ? b.PD_RK : b.PD_ABROAD;
+  const limKzt = limMrp * b.MRP;
+  const over = dailyKzt - limKzt;
+  const rateLine = n.cur === 'MRP' ? `1 ${t('mrp')} = ${money(b.MRP)}` : `1 ${n.cur} = ${num(RATES.list[n.cur], 2)} ₸`;
+  out.innerHTML = `
+    <div class="grid g3" style="margin-top:4px">
+      <div class="statc" style="--g:linear-gradient(120deg,#8b5cf6,#6366f1)"><div class="muted small">📅 ${t('days')}</div><div class="stat num">${days}</div></div>
+      <div class="statc" style="--g:linear-gradient(120deg,#f59e0b,#ef4444)"><div class="muted small">🍽️ ${t('dailyTotal')}</div><div class="stat num">${money(dailyKzt * days)}</div></div>
+      <div class="statc" style="--g:linear-gradient(120deg,#10b981,#0ea5e9)"><div class="muted small">🏨 ${t('hotelTotal')}</div><div class="stat num">${money(toKzt(n.hotel, n.cur) * nights)}</div></div>
+    </div>
+    <div class="table-wrap" style="margin-top:14px"><table class="t num">
+      <thead><tr><th></th><th class="r">${t('inNorm')}</th><th class="r">${t('inKzt')}</th></tr></thead>
+      <tbody>
+        <tr><td>${t('dailyPer')}</td><td class="r">${curFmt(n.daily, n.cur)}</td><td class="r">${money(dailyKzt)}</td></tr>
+        <tr><td>${t('dailyTotal')} <span class="muted small">× ${days}</span></td><td class="r"><strong>${curFmt(n.daily * days, n.cur)}</strong></td><td class="r"><strong>${money(dailyKzt * days)}</strong></td></tr>
+        <tr><td>${t('hotelPer')}</td><td class="r">${curFmt(n.hotel, n.cur)}</td><td class="r">${money(toKzt(n.hotel, n.cur))}</td></tr>
+        <tr><td>${t('hotelTotal')} <span class="muted small">× ${nights} ${state.lang === 'kz' ? 'түн' : 'ноч.'}</span></td><td class="r"><strong>${curFmt(n.hotel * nights, n.cur)}</strong></td><td class="r"><strong>${money(toKzt(n.hotel, n.cur) * nights)}</strong></td></tr>
+      </tbody></table></div>
+    <div class="result ${over > 0 ? 'warn' : 'ok'}" style="margin-top:14px">
+      <p style="margin:0" class="small">${over > 0 ? IC.alert : IC.check} ${over > 0 ? t('taxOver', { lim: `${limMrp} ${t('mrp')} = ${money(limKzt)}`, over: money(over) }) : t('taxOk', { lim: `${limMrp} ${t('mrp')} = ${money(limKzt)}` })}</p>
+    </div>
+    <div class="note">${IC.pin}<span>${n.city ? (n.cityOwn ? t('cityNorm') : t('countryNorm')) : ''} ${t('nightsNote')}</span></div>
+    <div class="note">${IC.info}<span>${t('kztNote', { d: dfmt(RATES.date) })} ${rateLine}.</span></div>`;
+}
+
+function renderNormTable(c) {
+  const i = PROFILE.cat - 1;
+  const rows = [{ name: '—', daily: c.daily[i], hotel: c.hotel[i], base: true }]
+    .concat(c.cities.map(ct => ({ name: L(ct), daily: (ct.daily || c.daily)[i], hotel: (ct.hotel || c.hotel)[i], own: !!ct.hotel })));
+  $('#normTable').innerHTML = `<div class="table-wrap"><table class="t num">
+    <thead><tr><th>${t('city')}</th><th class="r">${t('dailyPer')}</th><th class="r">${t('hotelPer')}</th></tr></thead>
+    <tbody>${rows.map(r => `<tr><td>${r.base ? `<em>${t('cityAny')}</em>` : esc(r.name)} ${r.own ? '<span class="pill pill-acc">★</span>' : ''}</td><td class="r">${curFmt(r.daily, c.cur)}</td><td class="r">${curFmt(r.hotel, c.cur)}</td></tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function pageInfo() {
+  const faq = state.lang === 'kz' ? [
+    ['Есеп неге болжамды?', 'Қорытынды соманы бухгалтерия бұйрық негізінде анықтайды. Калькулятор анықтамалық ақпарат береді.'],
+    ['Өтінішті осы порталда беруге бола ма?', 'Жоқ. Портал тек үлгі мен нұсқаулық береді, өтініш өтініш беру жүйесінде беріледі.'],
+    ['Төлем «Менің төлемдерімде» қашан пайда болады?', 'Бұйрық шыққаннан кейін 5 жұмыс күні ішінде HR маманы тізілімге енгізеді.'],
+    ['Неліктен өткен жылдар бойынша деректер жоқ?', `Төлемдер тізілімі ${REG_START} жылдан бастап жүргізіледі.`],
+    ['Айлығым сақтала ма?', 'Жоқ. Калькуляторға енгізілген айлық серверге жіберілмейді және ешқайда сақталмайды.'],
+    ['Жеңілдікті санатты қалай растауға болады?', 'Профильде санатты көрсетіңіз және растайтын құжаттарды HR-ға жіберіңіз.']
+  ] : [
+    ['Почему расчёт ориентировочный?', 'Итоговую сумму определяет бухгалтерия на основании приказа. Калькулятор даёт справочную информацию.'],
+    ['Можно ли подать заявление на портале?', 'Нет. Портал выдаёт шаблон и инструкцию, а заявление подаётся в системе подачи заявлений.'],
+    ['Когда выплата появится в «Моих выплатах»?', 'Специалист HR вносит выплату в реестр в течение 5 рабочих дней после издания приказа.'],
+    ['Почему нет данных за прошлые годы?', `Реестр выплат ведётся с ${REG_START} года, более ранние выплаты не переносятся.`],
+    ['Сохраняется ли мой оклад?', 'Нет. Оклад, введённый в калькуляторе, не отправляется на сервер и нигде не сохраняется.'],
+    ['Как подтвердить льготную категорию?', 'Укажите категорию в профиле и передайте подтверждающие документы в HR — после проверки статус изменится на «подтверждена».']
+  ];
+  const docs = state.lang === 'kz'
+    ? ['Әлеуметтік қолдау көрсету қағидалары', 'Іссапар шығындарының нормалары туралы бұйрық', 'Іссапарға жіберу тәртібі туралы ереже', 'Өтініш үлгілері (мұрағат)']
+    : ['Правила оказания социальной поддержки работникам', 'Приказ о нормах командировочных расходов', 'Положение о порядке направления в командировки', 'Шаблоны заявлений (архив)'];
+  const contacts = [
+    { n: OWNERS.soc, area: { ru: 'Меры социальной поддержки, шаблоны заявлений', kz: 'Әлеуметтік қолдау шаралары, өтініш үлгілері' } },
+    { n: { ru: 'Бухгалтерия — расчёты с персоналом', kz: 'Бухгалтерия — персоналмен есеп айырысу', contact: 'вн. 2230, buh@corp.local' }, area: { ru: 'Командировочные, нормы, авансовые отчёты', kz: 'Іссапар шығыстары, нормалар, аванстық есептер' } },
+    { n: { ru: 'Служба поддержки ИТ', kz: 'АТ қолдау қызметі', contact: 'вн. 1000, it@corp.local' }, area: { ru: 'Доступ к порталу, вход через SSO', kz: 'Порталға қол жеткізу, SSO арқылы кіру' } }
+  ];
+  return `
+  ${banner('info', t('navInfo'), t('tileInfo'), '💡')}
+  <div class="split">
+    <div class="card">
+      <h2>${t('infoFaq')}</h2>
+      <div class="field"><input id="faqQ" type="search" placeholder="${esc(t('faqSearch'))}" aria-label="${esc(t('faqSearch'))}"></div>
+      <div id="faqList">${faq.map(([q, a]) => `<details class="faq"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>
+    </div>
+    <div>
+      <div class="card">
+        <h2>${t('infoDocs')}</h2>
+        ${docs.map(d => `<div class="kv"><span style="color:var(--text)">${IC.doc} ${esc(d)}</span><span class="pill">${t('soon')}</span></div>`).join('')}
+      </div>
+      <div class="card">
+        <h2>${t('infoContacts')}</h2>
+        ${contacts.map(c => `<div style="padding:10px 0;border-top:1px solid var(--border)"><strong>${esc(L(c.n))}</strong><div class="muted small">${esc(L(c.area))}</div><div class="small">${esc(c.n.contact)}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------- Админ-панель ---------- */
+const ROLE_TABS = { hr: ['registry', 'measures'], acc: ['base', 'rates', 'norms'], admin: ['users', 'journal', 'registry', 'base'] };
+const TAB_KEYS = { registry: 'tRegistry', measures: 'tMeasures', base: 'tBase', rates: 'tRates', norms: 'tNorms', users: 'tUsers', journal: 'tJournal' };
+
+function pageAdmin() {
+  const tabs = ROLE_TABS[state.role];
+  if (!tabs) return `${banner('admin', t('admTitle'), '', '⚙️')}<div class="card">${t('noAccess')}</div>`;
+  if (!tabs.includes(state.adminTab)) state.adminTab = tabs[0];
+  return `
+  ${banner('admin', t('admTitle'), t('admSub'), '⚙️')}
+  <div class="tabs">${tabs.map(k => `<button data-tab="${k}" class="${k === state.adminTab ? 'on' : ''}">${t(TAB_KEYS[k])}</button>`).join('')}</div>
+  <div id="admBody">${adminTab(state.adminTab)}</div>`;
+}
+
+function adminTab(k) {
+  const ro = state.role === 'admin' && (k === 'registry' || k === 'base'); // администратор только просматривает
+  if (k === 'registry') return `
+    ${ro ? '' : `<div class="card">
+      <h2>${t('regAdd')}</h2>
+      <div class="grid g4">
+        <div class="field"><label for="rOrder">${t('orderNo')}</label><input id="rOrder" type="text" placeholder="301-к"></div>
+        <div class="field"><label for="rOrderDate">${t('orderDate')}</label><input id="rOrderDate" type="date" value="${isoDate(TODAY)}"></div>
+        <div class="field"><label for="rDate">${t('payDate')}</label><input id="rDate" type="date" value="${isoDate(TODAY)}"></div>
+        <div class="field"><label for="rSum">${t('sum')}, ₸</label><input id="rSum" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="field"><label for="rMeasure">${t('measure')}</label><select id="rMeasure">${MEASURES.map(m => `<option value="${m.id}">${esc(L(m.title))}</option>`).join('')}</select></div>
+      <div class="field"><label>${t('employees')}</label><div class="checks">${EMPLOYEES.map(e => `<label><input type="checkbox" value="${e.tab}"> ${esc(e.fio)} <span class="muted small">${e.tab}</span></label>`).join('')}</div></div>
+      <div id="rWarn"></div>
+      <button class="btn" id="rSave">${t('save')}</button>
+    </div>`}
+    <div class="card"><h2>${t('tRegistry')}</h2>${registryTable()}</div>`;
+  if (k === 'measures') return `<div class="table-wrap"><table class="t">
+    <thead><tr><th>${t('measure')}</th><th>${t('calcType')}</th><th>${t('fPeriod')}</th><th>${t('fRule')}</th><th>${t('template')}</th></tr></thead>
+    <tbody>${MEASURES.map(m => `<tr><td>${esc(L(m.title))}<div class="muted small">${esc(L(cat(m.cat)))}</div></td><td class="num">${calcText(m)}</td><td>${periodText(m)}</td><td>${esc(m.rule)}</td><td>${m.tpl ? `<span class="pill pill-ok">${t('yes')}</span>` : `<span class="pill pill-warn">${t('no')}</span>`}</td></tr>`).join('')}</tbody></table></div>`;
+  if (k === 'base') {
+    const years = Object.keys(BASE).sort().reverse();
+    return `<div class="table-wrap"><table class="t num">
+      <thead><tr><th>${t('year')}</th><th class="r">${t('mrp')}, ₸</th><th class="r">${t('mzp')}, ₸</th><th class="r">${t('pdRk')}</th><th class="r">${t('pdAbroad')}</th></tr></thead>
+      <tbody>${years.map(y => `<tr><td><strong>${y}</strong></td>${['MRP', 'MZP', 'PD_RK', 'PD_ABROAD'].map(f => `<td class="r">${ro ? num(BASE[y][f]) : `<input type="number" data-base="${y}:${f}" value="${BASE[y][f]}" style="text-align:right">`}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table></div>${ro ? '' : `<button class="btn" id="baseSave" style="margin-top:14px">${t('save')}</button>`}`;
+  }
+  if (k === 'rates') return `
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px"><button class="btn btn-ghost" id="ratesLoad">${t('loadRates')}</button><span class="muted small">${t('date')}: ${dfmt(RATES.date)}</span></div>
+    <div class="table-wrap"><table class="t num">
+      <thead><tr><th>${t('currency')}</th><th class="r">${t('rate')}</th><th>${t('source')}</th></tr></thead>
+      <tbody>${Object.entries(RATES.list).map(([c, v]) => `<tr><td><strong>${c}</strong></td><td class="r"><input type="number" step="0.01" data-rate="${c}" value="${v}" style="text-align:right"></td><td>${RATES.manual && RATES.manual[c] ? `<span class="pill pill-warn">${t('srcManual')}</span>` : `<span class="pill pill-ok">${t('srcNb')}</span>`}</td></tr>`).join('')}</tbody>
+    </table></div>`;
+  if (k === 'norms') return `<div class="table-wrap"><table class="t num">
+    <thead><tr><th>${t('country')}</th><th>${t('city')}</th><th>${t('currency')}</th><th class="r">${t('dailyPer')} 1/2/3</th><th class="r">${t('hotelPer')} 1/2/3</th><th>${t('validFrom')}</th></tr></thead>
+    <tbody>${COUNTRIES.flatMap(c => [{ c, ct: null }].concat(c.cities.filter(ct => ct.hotel || ct.daily).map(ct => ({ c, ct })))).map(({ c, ct }) =>
+      `<tr><td>${esc(L(c))}</td><td>${ct ? esc(L(ct)) : '<span class="muted">—</span>'}</td><td>${c.cur === 'MRP' ? t('mrp') : c.cur}</td><td class="r">${(ct && ct.daily || c.daily).join(' / ')}</td><td class="r">${(ct && ct.hotel || c.hotel).join(' / ')}</td><td>01.01.${CUR_YEAR}</td></tr>`).join('')}</tbody></table></div>`;
+  if (k === 'users') {
+    const roles = { employee: 'roleEmployee', hr: 'roleHr', acc: 'roleAcc', admin: 'roleAdmin' };
+    return `<div class="table-wrap"><table class="t">
+      <thead><tr><th>${t('tabNo')}</th><th>${t('employee')}</th><th>${t('role')}</th></tr></thead>
+      <tbody>${EMPLOYEES.map(e => `<tr><td class="num">${e.tab}</td><td>${esc(e.fio)}</td><td><select data-user="${e.tab}" style="max-width:220px">${Object.entries(roles).map(([r, key]) => `<option value="${r}" ${e.role === r ? 'selected' : ''}>${t(key)}</option>`).join('')}</select></td></tr>`).join('')}</tbody></table></div>`;
+  }
+  if (k === 'journal') return `<div class="table-wrap"><table class="t">
+    <thead><tr><th>${t('when')}</th><th>${t('who')}</th><th>${t('what')}</th></tr></thead>
+    <tbody>${JOURNAL.slice().reverse().map(j => `<tr><td class="num" style="white-space:nowrap">${esc(j.at)}</td><td style="white-space:nowrap">${esc(j.who)}</td><td>${esc(L(j.what))}</td></tr>`).join('')}</tbody></table></div>`;
+  return '';
+}
+
+function registryTable() {
+  const rows = PAYMENTS.slice().sort((a, b) => b.date.localeCompare(a.date));
+  return `<div class="table-wrap"><table class="t num">
+    <thead><tr><th>${t('date')}</th><th>${t('employee')}</th><th>${t('measure')}</th><th>${t('order')}</th><th class="r">${t('sum')}</th><th>${t('enteredBy')}</th></tr></thead>
+    <tbody>${rows.map(p => `<tr><td>${dfmt(p.date)}</td><td>${esc((EMPLOYEES.find(e => e.tab === p.emp) || {}).fio || p.emp)}</td><td>${esc(L(measure(p.m).title))}</td><td>№ ${esc(p.order)} ${t('from')} ${dfmt(p.orderDate)}</td><td class="r">${money(p.sum)}</td><td>${esc(p.by)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+function actorName() { return { hr: 'Нурланов Е. К.', acc: 'Ким О. В.', admin: 'Оспанов Т. Б.' }[state.role] || PROFILE.short; }
+function nowStamp() { const d = new Date(); return isoDate(d) + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+function log(ru, kz) { JOURNAL.push({ at: nowStamp(), who: actorName(), what: { ru, kz } }); }
+
+function bindAdmin() {
+  $$('[data-tab]').forEach(b => b.onclick = () => { state.adminTab = b.dataset.tab; render(); });
+  const save = $('#rSave');
+  if (save) {
+    let confirmed = false;
+    const reset = () => { confirmed = false; save.textContent = t('save'); $('#rWarn').innerHTML = ''; };
+    $$('#admBody .checks input, #rMeasure').forEach(el => el.addEventListener('change', reset));
+    save.onclick = () => {
+      const order = $('#rOrder').value.trim(), od = $('#rOrderDate').value, pd = $('#rDate').value, sum = +$('#rSum').value, mid = $('#rMeasure').value;
+      const emps = $$('#admBody .checks input:checked').map(i => i.value);
+      if (!order || !od || !pd || !(sum > 0) || !emps.length) { $('#rWarn').innerHTML = `<div class="callout warn" style="margin-bottom:12px">${t('fillAll')}</div>`; return; }
+      const m = measure(mid), y = +pd.slice(0, 4);
+      const over = emps.filter(e => limitState(m, e, y).exhausted);
+      if (over.length && !confirmed) {
+        confirmed = true; save.textContent = t('saveAnyway');
+        $('#rWarn').innerHTML = `<div class="callout warn" style="margin-bottom:12px">${IC.alert} ${t('limitWarn', { list: over.map(e => esc(EMPLOYEES.find(x => x.tab === e).fio)).join(', ') })}</div>`;
+        return;
+      }
+      emps.forEach(e => PAYMENTS.push({ emp: e, m: mid, sum, date: pd, order, orderDate: od, by: actorName() }));
+      log(`Реестр: приказ № ${order}, «${m.title.ru}», ${emps.length} работн.`, `Тізілім: № ${order} бұйрық, «${m.title.kz}», ${emps.length} қызметкер`);
+      toast(t('saved')); render();
+    };
+  }
+  const bs = $('#baseSave');
+  if (bs) bs.onclick = () => {
+    $$('[data-base]').forEach(inp => {
+      const [y, f] = inp.dataset.base.split(':'), v = +inp.value;
+      if (v > 0 && v !== BASE[y][f]) { log(`Базовые величины ${y}: ${f} ${num(BASE[y][f])} → ${num(v)}`, `${y} базалық шамалары: ${f} ${num(BASE[y][f])} → ${num(v)}`); BASE[y][f] = v; }
+    });
+    toast(t('saved')); render();
+  };
+  $$('[data-rate]').forEach(inp => inp.onchange = () => {
+    const c = inp.dataset.rate, v = +inp.value; if (!(v > 0)) return;
+    log(`Курс ${c}: ${num(RATES.list[c], 2)} → ${num(v, 2)} (ручной ввод)`, `${c} бағамы: ${num(RATES.list[c], 2)} → ${num(v, 2)} (қолмен)`);
+    RATES.list[c] = v; RATES.manual = RATES.manual || {}; RATES.manual[c] = true; render();
+  });
+  const rl = $('#ratesLoad'); if (rl) rl.onclick = () => { RATES.manual = {}; RATES.date = new Date(); toast(t('ratesLoaded')); render(); };
+  $$('[data-user]').forEach(sel => sel.onchange = () => {
+    const e = EMPLOYEES.find(x => x.tab === sel.dataset.user);
+    log(`Роль ${e.fio}: ${e.role} → ${sel.value}`, `${e.fio} рөлі: ${e.role} → ${sel.value}`); e.role = sel.value; toast(t('saved'));
+  });
+}
+
+/* ---------- Поиск ---------- */
+const TRIP_WORDS = ['суточн', 'командир', 'проживан', 'гостиниц', 'отел', 'тәулік', 'іссапар', 'қонақ'];
+function norm(s) { return s.toLowerCase().replace(/ё/g, 'е').replace(/[«»"().,]/g, ' '); }
+function stem(w) { return w.length > 5 ? w.slice(0, w.length - 2) : w; }
+function search(q) {
+  const words = norm(q).split(/\s+/).filter(w => w.length > 1);
+  if (!words.length) return [];
+  const tripIntent = words.some(w => TRIP_WORDS.some(tw => w.startsWith(tw)));
+  const rest = words.filter(w => !TRIP_WORDS.some(tw => w.startsWith(tw)) && !['по', 'в', 'на', 'при', 'для'].includes(w));
+  const res = [];
+  // страны и города
+  COUNTRIES.forEach(c => {
+    const cHay = norm(c.ru + ' ' + c.kz);
+    if (rest.length && rest.every(w => cHay.includes(stem(w)))) res.push({ type: 'trip', href: `#/trips?c=${c.code}`, title: L(c), sub: t('navTrips'), score: 3 });
+    c.cities.forEach((ct, i) => {
+      const hay = norm(ct.ru + ' ' + ct.kz + ' ' + c.ru + ' ' + c.kz);
+      if (rest.length && rest.every(w => hay.includes(stem(w))) && !cHay.includes(stem(rest[0]))) res.push({ type: 'trip', href: `#/trips?c=${c.code}&city=${i}`, title: `${L(ct)}, ${L(c)}`, sub: t('navTrips'), score: 3 });
+    });
+  });
+  if (tripIntent && !res.length) res.push({ type: 'trip', href: '#/trips', title: t('tripTitle'), sub: t('navTrips'), score: 2 });
+  // меры
+  if (!tripIntent || !res.length) MEASURES.forEach(m => {
+    const hay = norm([m.title.ru, m.title.kz, m.desc.ru, m.desc.kz, L(cat(m.cat)), ...(m.syn || [])].join(' '));
+    const hits = words.filter(w => hay.includes(stem(w))).length;
+    if (hits && hits >= Math.ceil(words.length / 2)) res.push({ type: 'm', href: `#/measure/${m.id}`, title: L(m.title), sub: `${L(cat(m.cat))} · ${calcText(m)}`, score: hits / words.length + (norm(L(m.title)).includes(stem(words[0])) ? 1 : 0) });
+  });
+  return res.sort((a, b) => b.score - a.score).slice(0, 7);
+}
+function showResults(q) {
+  const box = $('#results');
+  if (!q.trim()) { box.classList.remove('show'); return; }
+  const r = search(q);
+  box.innerHTML = r.length
+    ? r.map(x => `<a href="${x.href}"><span class="tile-ico" style="width:34px;height:34px;margin:0;flex:none">${x.type === 'trip' ? IC.plane : IC.heart}</span><span><strong>${esc(x.title)}</strong><br><span class="muted small">${esc(x.sub)}</span></span></a>`).join('')
+    : `<div class="empty">${t('searchEmpty')}</div>`;
+  box.classList.add('show');
+}
+
+/* ============================================================
+   РОУТИНГ И ОБЩИЙ КАРКАС
+   ============================================================ */
+/* Текущий маршрут хранится в памяти — навигация работает и там, где адресная строка недоступна (превью, data:-URL). */
+let currentPath = (location.hash || '#/');
+function go(href, push = true) {
+  currentPath = href || '#/';
+  if (push) { try { history.pushState(null, '', currentPath); } catch (e) { /* адрес не меняется — не страшно */ } }
+  render(); window.scrollTo(0, 0);
+}
+function route() {
+  const h = currentPath.replace(/^#\/?/, '');
+  const [path, qs] = h.split('?');
+  const parts = path.split('/').filter(Boolean);
+  return { name: parts[0] || 'home', arg: parts[1], params: new URLSearchParams(qs || '') };
+}
+
+function renderChrome() {
+  document.documentElement.lang = state.lang === 'kz' ? 'kk' : 'ru';
+  if (state.theme === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', state.theme);
+  $$('[data-i]').forEach(el => el.textContent = t(el.dataset.i));
+  $$('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === state.lang));
+  const r = route().name;
+  const items = [['home', 'navHome', '#/'], ['support', 'navSupport', '#/support'], ['payments', 'navPayments', '#/payments'], ['trips', 'navTrips', '#/trips'], ['info', 'navInfo', '#/info']];
+  if (state.role !== 'employee') items.push(['admin', 'navAdmin', '#/admin']);
+  const active = r === 'measure' ? 'support' : r;
+  $('#nav').innerHTML = items.map(([k, key, href]) => `<a href="${href}" class="${active === k ? 'active' : ''}">${t(key)}</a>`).join('');
+  $('#avatar').textContent = 'СА';
+  $('#uname').textContent = PROFILE.short;
+  const roles = [['employee', 'roleEmployee'], ['hr', 'roleHr'], ['acc', 'roleAcc'], ['admin', 'roleAdmin']];
+  $('#userMenu').innerHTML = `
+    <strong>${esc(PROFILE.fio)}</strong>
+    <div class="muted small">${esc(L(PROFILE.pos))} · ${PROFILE.tab}</div>
+    <div class="small" style="margin-top:6px;color:var(--ok)">${IC.check} ${t('sso')}</div>
+    <label for="roleSel">${t('role')}</label>
+    <select id="roleSel">${roles.map(([v, k]) => `<option value="${v}" ${state.role === v ? 'selected' : ''}>${t(k)}</option>`).join('')}</select>
+    <label>${t('theme')}</label>
+    <div class="seg" style="width:100%">${[['auto', 'themeAuto'], ['light', 'themeLight'], ['dark', 'themeDark']].map(([v, k]) => `<button data-theme-set="${v}" class="${state.theme === v ? 'on' : ''}" style="flex:1">${t(k)}</button>`).join('')}</div>`;
+  $('#roleSel').onchange = e => { state.role = e.target.value; if (state.role !== 'employee') go('#/admin'); else render(); $('#userMenu').classList.add('open'); };
+  $$('[data-theme-set]').forEach(b => b.onclick = () => { state.theme = b.dataset.themeSet; store('nav-theme', state.theme); renderChrome(); $('#userMenu').classList.add('open'); });
+  $('#footer').textContent = t('footer');
+}
+
+function render() {
+  renderChrome();
+  const r = route(), app = $('#app');
+  switch (r.name) {
+    case 'support': app.innerHTML = pageSupport(); $$('[data-cat]').forEach(b => b.onclick = () => { state.catFilter = b.dataset.cat; render(); }); break;
+    case 'measure': {
+      app.innerHTML = pageMeasure(r.arg);
+      const m = measure(r.arg);
+      if (m) { $('#calcBtn').onclick = () => runCalc(m); const s = $('#salary'); if (s) s.addEventListener('keydown', e => { if (e.key === 'Enter') runCalc(m); }); }
+      break;
+    }
+    case 'payments':
+      app.innerHTML = pagePayments();
+      $('#fMeasure').onchange = $('#fYear').onchange = renderPayTable; renderPayTable();
+      $('#cBtn').onclick = runPayCheck;
+      break;
+    case 'trips':
+      app.innerHTML = pageTrips(r.params);
+      fillCities(r.params.get('city') ?? '');
+      $('#tCountry').onchange = () => { fillCities(); runTrip(); };
+      ['#tCity', '#tStart', '#tEnd'].forEach(s => $(s).onchange = runTrip);
+      runTrip();
+      break;
+    case 'info':
+      app.innerHTML = pageInfo();
+      $('#faqQ').oninput = e => { const q = norm(e.target.value); $$('#faqList details').forEach(d => { const hit = !q || norm(d.textContent).includes(q); d.style.display = hit ? '' : 'none'; if (q && hit) d.open = true; }); };
+      break;
+    case 'admin': app.innerHTML = pageAdmin(); bindAdmin(); break;
+    default:
+      app.innerHTML = pageHome();
+      const q = $('#q');
+      q.oninput = () => showResults(q.value);
+      q.onkeydown = e => { if (e.key === 'Enter') { const first = $('#results a'); if (first) go(first.getAttribute('href')); } };
+      $$('[data-q]').forEach(c => c.onclick = () => { q.value = c.dataset.q; showResults(q.value); q.focus(); });
+  }
+}
+
+/* Глобальные обработчики */
+$$('[data-lang]').forEach(b => b.onclick = () => { state.lang = b.dataset.lang; store('nav-lang', state.lang); render(); });
+$('#userBtn').onclick = e => { e.stopPropagation(); $('#userMenu').classList.toggle('open'); };
+document.addEventListener('click', e => {
+  if (!e.target.closest('.user')) $('#userMenu').classList.remove('open');
+  const a = e.target.closest('a[href^="#/"]');
+  if (a && !e.ctrlKey && !e.metaKey && !e.shiftKey) { e.preventDefault(); go(a.getAttribute('href')); }
+});
+window.addEventListener('hashchange', () => { if (location.hash && location.hash !== currentPath) go(location.hash, false); });
+window.addEventListener('popstate', () => go(location.hash || '#/', false));
+render();
+</script>
+</body>
+</html>
